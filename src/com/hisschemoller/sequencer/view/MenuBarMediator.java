@@ -1,0 +1,57 @@
+package com.hisschemoller.sequencer.view;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JFrame;
+
+import org.puremvc.java.multicore.patterns.mediator.Mediator;
+
+import com.hisschemoller.sequencer.notification.SeqNotifications;
+import com.hisschemoller.sequencer.view.components.MenuBar;
+
+public class MenuBarMediator extends Mediator implements ActionListener
+{
+	public static final String NAME = MenuBarMediator.class.getName ( );
+
+	public MenuBarMediator ( String mediatorName, Object viewComponent )
+	{
+		super ( NAME, viewComponent );
+	}
+
+	@Override public final void onRegister ( )
+	{
+		super.onRegister ( );
+
+		JFrame jFrame = ( JFrame ) viewComponent;
+		MenuBar menuBar = new MenuBar ( this );
+		jFrame.setJMenuBar ( menuBar );
+		setViewComponent ( menuBar );
+	}
+
+	public void actionPerformed ( ActionEvent event )
+	{
+		String command = event.getActionCommand ( );
+
+		if ( command == MenuBar.NEW )
+		{
+			sendNotification ( SeqNotifications.NEW_PROJECT );
+		}
+		else if ( command == MenuBar.OPEN )
+		{
+			sendNotification ( SeqNotifications.OPEN_PROJECT );
+		}
+		else if ( command == MenuBar.SAVE )
+		{
+			sendNotification ( SeqNotifications.SAVE_PROJECT );
+		}
+		else if ( command == MenuBar.SAVE_AS )
+		{
+			sendNotification ( SeqNotifications.SAVE_PROJECT_AS );
+		}
+		else if ( command == MenuBar.HELP )
+		{
+			sendNotification ( SeqNotifications.SHOW_HELP );
+		}
+	}
+}
