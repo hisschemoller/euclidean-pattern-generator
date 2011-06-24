@@ -46,6 +46,9 @@ public class PatternVO
 	public int midiVelocity;
 	public int noteLength;
 
+	/** OSC settings */
+	public String address;
+
 	/** Other settings */
 	public boolean mute = false;
 	public boolean solo = false;

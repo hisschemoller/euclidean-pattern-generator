@@ -76,6 +76,7 @@ public class CreatePatternCommand extends SimpleCommand
 		patternVO.midiPitch = 60;
 		patternVO.midiVelocity = 100;
 		patternVO.noteLength = sequencerProxy.getPulsesPerQuarterNote ( ) / 4;
+		patternVO.address = "/eu/pattern" + patterns.size();
 		patternVO.mutedBySolo = mutedBySolo;
 		patternVO.viewX = point.x;
 		patternVO.viewY = point.y;

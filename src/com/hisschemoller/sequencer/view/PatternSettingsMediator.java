@@ -42,14 +42,15 @@ public class PatternSettingsMediator extends Mediator implements IViewEventListe
 
 	public String [ ] listNotificationInterests ()
 	{
-		String [ ] interests = new String[ 7 ];
+		String [ ] interests = new String[ 8 ];
 		interests[ 0 ] = SeqNotifications.PATTERN_SETTINGS_UPDATED;
 		interests[ 1 ] = SeqNotifications.MIDI_SETTINGS_UPDATED;
-		interests[ 2 ] = SeqNotifications.PATTERN_SETTINGS_OPENED;
-		interests[ 3 ] = SeqNotifications.SELECT_PATTERN;
-		interests[ 4 ] = SeqNotifications.PATTERN_SOLOED;
-		interests[ 5 ] = SeqNotifications.PATTERN_MUTED;
-		interests[ 6 ] = SeqNotifications.RESOLUTION_UPDATED;
+		interests[ 3 ] = SeqNotifications.OSC_SETTINGS_UPDATED;
+		interests[ 4 ] = SeqNotifications.PATTERN_SETTINGS_OPENED;
+		interests[ 5 ] = SeqNotifications.SELECT_PATTERN;
+		interests[ 6 ] = SeqNotifications.PATTERN_SOLOED;
+		interests[ 7 ] = SeqNotifications.PATTERN_MUTED;
+		interests[ 8 ] = SeqNotifications.RESOLUTION_UPDATED;
 		return interests;
 	}
 
@@ -60,6 +61,10 @@ public class PatternSettingsMediator extends Mediator implements IViewEventListe
 			getView ( ).updateSettings ( (PatternVO) note.getBody ( ) );
 		}
 		else if ( note.getName ( ) == SeqNotifications.MIDI_SETTINGS_UPDATED )
+		{
+			getView ( ).updateSettings ( (PatternVO) note.getBody ( ) );
+		}
+		else if ( note.getName ( ) == SeqNotifications.OSC_SETTINGS_UPDATED )
 		{
 			getView ( ).updateSettings ( (PatternVO) note.getBody ( ) );
 		}
@@ -106,6 +111,10 @@ public class PatternSettingsMediator extends Mediator implements IViewEventListe
 		{
 		case ViewEvent.MIDI_SETTINGS_CHANGE:
 			sendNotification ( SeqNotifications.UPDATE_MIDI_SETTINGS, getView ( ).getSettings ( ) );
+			break;
+
+		case ViewEvent.OSC_SETTINGS_CHANGE:
+			sendNotification ( SeqNotifications.UPDATE_OSC_SETTINGS, getView ( ).getSettings ( ) );
 			break;
 
 		case ViewEvent.PATTERN_SETTINGS_CHANGE:
