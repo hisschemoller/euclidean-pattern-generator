@@ -37,6 +37,7 @@ public class ViewEvent extends AWTEvent
 
 	/** Settings */
 	public static final int MIDI_SETTINGS_CHANGE = 20;
+	public static final int OSC_SETTINGS_CHANGE = 25;
 	public static final int PATTERN_SETTINGS_CHANGE = 21;
 	public static final int DELETE_PATTERN = 22;
 	public static final int MUTE_PATTERN = 23;

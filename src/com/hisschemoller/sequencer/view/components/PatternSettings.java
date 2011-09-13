@@ -40,6 +40,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -67,6 +68,7 @@ public class PatternSettings extends JPanel implements ActionListener, ChangeLis
 	private JLabel _velocityLabel;
 	private JSlider _lengthSlider;
 	private JLabel _lengthLabel;
+	private JTextField _addressTextField;
 	private JCheckBox _muteCheckBox;
 	private JCheckBox _soloCheckBox;
 	private JButton _deleteButton;
@@ -147,6 +149,7 @@ public class PatternSettings extends JPanel implements ActionListener, ChangeLis
 		_velocitySlider.setValue ( patternVO.midiVelocity );
 		_velocityLabel.setText ( Integer.toString ( patternVO.midiVelocity ) );
 		_lengthSlider.setValue ( patternVO.noteLength );
+		_addressTextField.setText ( patternVO.address );
 		_lengthLabel.setText ( Integer.toString ( patternVO.noteLength ) );
 		_muteCheckBox.setEnabled ( !patternVO.mutedBySolo && !patternVO.solo );
 		_muteCheckBox.setSelected ( patternVO.mute );
@@ -189,6 +192,10 @@ public class PatternSettings extends JPanel implements ActionListener, ChangeLis
 		{
 			dispatchViewEvent ( _deleteButton, ViewEvent.SOLO_PATTERN );
 		}
+        else if ( event.getSource ( ) == _addressTextField )
+        {
+            dispatchViewEvent ( _addressTextField, ViewEvent.OSC_SETTINGS_CHANGE );
+        }
 	}
 
 	public void stateChanged ( ChangeEvent event )
@@ -236,6 +243,7 @@ public class PatternSettings extends JPanel implements ActionListener, ChangeLis
 		settingsVO.midiPitch = _pitchSlider.getValue ( );
 		settingsVO.midiVelocity = _velocitySlider.getValue ( );
 		settingsVO.noteLength = _lengthSlider.getValue ( );
+		settingsVO.address = _addressTextField.getText ( );
 		settingsVO.steps = _stepsSlider.getValue ( );
 		settingsVO.fills = _fillsSlider.getValue ( );
 		settingsVO.rotation = _rotationSlider.getValue ( );
@@ -315,33 +323,52 @@ public class PatternSettings extends JPanel implements ActionListener, ChangeLis
 		_lengthSlider = createSlider ( 9, 1, 1, 1 );
 		_lengthLabel = createLabel ( 9, 2, "", true );
 
-		label = new JLabel ( "Other Settings" );
+		label = new JLabel ( "OSC Settings" );
 		constraints.gridx = 0;
-		constraints.gridy = 10;
+		constraints.gridy = 11;
 		constraints.gridwidth = 3;
 		add ( label, constraints );
 
-		createLabel ( 11, 0, "Mute", false );
+		createLabel ( 12, 0, "Address", false );
+		_addressTextField = new JTextField ( 24 );
+        _addressTextField.setMinimumSize ( new Dimension ( 128, 20 ) );
+        _addressTextField.setPreferredSize ( new Dimension ( 128, 20 ) );
+		_addressTextField.addActionListener ( this );
+		constraints.gridx = 1;
+		constraints.gridy = 12;
+		constraints.gridwidth = 2;
+		Insets oldInsets = constraints.insets;
+        constraints.insets = new Insets ( 0, 12, 0, 0 );
+		add ( _addressTextField, constraints );
+		constraints.insets = oldInsets;
+
+		label = new JLabel ( "Other Settings" );
+		constraints.gridx = 0;
+		constraints.gridy = 14;
+		constraints.gridwidth = 3;
+		add ( label, constraints );
+
+		createLabel ( 15, 0, "Mute", false );
 		_muteCheckBox = new JCheckBox ( );
 		_muteCheckBox.addActionListener ( this );
 		constraints.gridx = 1;
-		constraints.gridy = 11;
+		constraints.gridy = 15;
 		constraints.gridwidth = 1;
-		constraints.insets = new Insets ( 0, 0, 0, 0 );
+		constraints.insets = new Insets ( 0, 12, 0, 0 );
 		add ( _muteCheckBox, constraints );
 
-		createLabel ( 12, 0, "Solo", false );
+		createLabel ( 16, 0, "Solo", false );
 		_soloCheckBox = new JCheckBox ( );
 		_soloCheckBox.addActionListener ( this );
 		constraints.gridx = 1;
-		constraints.gridy = 12;
+		constraints.gridy = 16;
 		add ( _soloCheckBox, constraints );
 
-		createLabel ( 13, 0, "Delete", false );
+		createLabel ( 17, 0, "Delete", false );
 		_deleteButton = new JButton ( "Delete pattern" );
 		_deleteButton.addActionListener ( this );
 		constraints.gridx = 1;
-		constraints.gridy = 13;
+		constraints.gridy = 17;
 		constraints.gridwidth = 1;
 		add ( _deleteButton, constraints );
 	}
@@ -353,8 +380,12 @@ public class PatternSettings extends JPanel implements ActionListener, ChangeLis
 		constraints.gridy = gridRow;
 		JSlider slider = new JSlider ( SwingConstants.HORIZONTAL, min, max, value );
 		slider.addChangeListener ( this );
+        slider.setMinimumSize ( new Dimension ( 128, 20 ) );
 		slider.setPreferredSize ( new Dimension ( 128, 20 ) );
+        Insets oldInsets = constraints.insets;
+        constraints.insets = new Insets ( 0, 12, 0, 0 );
 		add ( slider, constraints );
+        constraints.insets = oldInsets;
 		return slider;
 	}
 

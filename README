@@ -36,11 +36,16 @@ MIDI settings
 This application generates MIDI notes. To hear actual sounds you'll have to connect it to some soft- or hardware that receives MIDI and translates it to audio.
 Use the MIDI Out combobox next to the Play and Tempo controls to select the appropriate MIDI port. Which one you choose depends on how you connected your software (probably through an internal MIDI port like MIDI Yoke on Windows or the IAC Bus on OSX) or hardware (likely with a USB to MIDI interface).
 
-Each pattern has it's own MIDI settings:
+Each pattern has its own MIDI settings:
 Channel is one of the sixteen channels a MIDI port has.
 Pitch is one of the 128 note numbers in MIDI. For melodic sounds it's mostly used to transfer its pitch (in the note scale), for percussive sounds each note number is often a different percussion instrument sound.
 Velocity is a number from 0 to 127 that usually indicates the volume at which the note plays.
 Length is the amount of time until the note is stopped.This is for now a number between 0 and 96, where 96 is one full measure (16 steps). Using 96 for one measure has to do with the internal sequencer resolution which is 24 PPQN.
+
+OSC settings
+This application also generates OSC messages.  By default OSC messages are sent to localhost at port 9000.  These values will be made configurable in the near future.
+
+Each pattern has its own OSC address.  To this OSC address are sent integer values for channel, pitch, velocity, and length, as described in the MIDI section above.
 
 Projects
 You can save your patterns with their position and settings as a project file, which is in fact a simple XML text file. A project includes the tempo in BPM as well. 
