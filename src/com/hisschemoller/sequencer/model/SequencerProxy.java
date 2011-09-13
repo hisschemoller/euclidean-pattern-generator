@@ -30,6 +30,8 @@ import javax.sound.midi.ShortMessage;
 
 import org.puremvc.java.multicore.patterns.proxy.Proxy;
 
+import oscP5.OscMessage;
+
 import com.hisschemoller.sequencer.model.vo.PatternVO;
 import com.hisschemoller.sequencer.notification.SeqNotifications;
 import com.hisschemoller.sequencer.notification.note.PatternPositionNote;
@@ -142,6 +144,17 @@ public class SequencerProxy extends Proxy implements ISequenceable
 			System.out.println ( "SequencerProxy.onNoteStart() exception - Invalid MIDI data: " + exception.getMessage ( ) );
 		}
 
+		/** Send OSC Note On notification. */
+		if ( patternVO.address != null && !patternVO.address.isEmpty () )
+		{
+		    OscMessage oscMessage = new OscMessage ( patternVO.address );
+		    oscMessage.add ( 1 );
+		    oscMessage.add ( message.getChannel ( ) );
+		    oscMessage.add ( message.getData1 () );
+		    oscMessage.add ( message.getData2 () );
+		    sendNotification ( SeqNotifications.SEND_OSC_MESSAGE, oscMessage );
+		}
+
 		/** Send view update notification. */
 		PatternSequenceNote note = new PatternSequenceNote ( ( int ) ( midiEvent.getTick ( ) / patternVO.quantization ), ShortMessage.NOTE_ON, patternVO.id );
 		sendNotification ( SeqNotifications.PATTERN_SEQUENCE_UPDATED, note );
@@ -164,6 +177,17 @@ public class SequencerProxy extends Proxy implements ISequenceable
 		catch ( InvalidMidiDataException exception )
 		{
 			System.out.println ( "SequencerProxy.onNoteStart() exception - Invalid MIDI data: " + exception.getMessage ( ) );
+		}
+
+		/** Send OSC Note Off notification. */
+		if ( patternVO.address != null && !patternVO.address.isEmpty () )
+		{
+		    OscMessage oscMessage = new OscMessage ( patternVO.address );
+		    oscMessage.add ( 0 );
+		    oscMessage.add ( message.getChannel ( ) );
+		    oscMessage.add ( message.getData1 () );
+		    oscMessage.add ( message.getData2 () );
+		    sendNotification ( SeqNotifications.SEND_OSC_MESSAGE, oscMessage );
 		}
 
 		/** Send view update notification. */

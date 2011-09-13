@@ -28,6 +28,7 @@ import org.puremvc.java.multicore.patterns.command.SimpleCommand;
 
 import com.hisschemoller.sequencer.model.FileProxy;
 import com.hisschemoller.sequencer.model.MidiProxy;
+import com.hisschemoller.sequencer.model.OscProxy;
 import com.hisschemoller.sequencer.model.SequencerProxy;
 import com.hisschemoller.sequencer.notification.SeqNotifications;
 import com.hisschemoller.sequencer.view.ControlsMediator;
@@ -43,6 +44,7 @@ public class StartupCommand extends SimpleCommand implements ICommand
 
 		getFacade ( ).registerProxy ( new SequencerProxy ( ) );
 		getFacade ( ).registerProxy ( new MidiProxy ( ) );
+		getFacade ( ).registerProxy ( new OscProxy ( ) );
 		getFacade ( ).registerProxy ( new FileProxy ( jFrame ) );
 
 		getFacade ( ).registerMediator ( new MenuBarMediator ( null, jFrame ) );

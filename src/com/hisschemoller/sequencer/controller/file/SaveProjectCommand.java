@@ -105,6 +105,11 @@ public class SaveProjectCommand extends SimpleCommand
 				midi.setAttribute ( "notelength", Integer.toString ( patternVO.noteLength ) );
 				patternNode.appendChild ( midi );
 
+                /** Add osc element. */
+                Element osc = document.createElement ( "osc" );
+                midi.setAttribute ( "address", patternVO.address );
+                patternNode.appendChild ( osc );
+
 				/** Add settings element. */
 				Element settings = document.createElement ( "settings" );
 				settings.setAttribute ( "solo", Boolean.toString ( patternVO.solo ) );

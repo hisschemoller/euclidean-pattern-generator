@@ -32,6 +32,7 @@ public class SettingsVO
 	public int midiPitch;
 	public int midiVelocity;
 	public int noteLength;
+	public String address;
 	public boolean mute;
 	public boolean solo;
 }

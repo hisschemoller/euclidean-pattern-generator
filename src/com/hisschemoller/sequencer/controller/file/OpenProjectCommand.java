@@ -207,6 +207,16 @@ public class OpenProjectCommand extends SimpleCommand
 			}
 		}
 
+        NodeList oscList = pattern.getElementsByTagName ( "osc" );
+        if ( oscList.getLength ( ) > 0 )
+        {
+            Element osc = ( Element ) oscList.item ( 0 );
+            if ( osc.getNodeType ( ) == Node.ELEMENT_NODE )
+            {
+                patternVO.address = osc.getAttribute ( "address" );
+            }
+        }
+
 		NodeList settingsList = pattern.getElementsByTagName ( "settings" );
 		if ( settingsList.getLength ( ) > 0 )
 		{
