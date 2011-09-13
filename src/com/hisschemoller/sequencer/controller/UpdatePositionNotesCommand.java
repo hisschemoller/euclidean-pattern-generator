@@ -39,7 +39,7 @@ public class UpdatePositionNotesCommand extends SimpleCommand
 	@Override public final void execute ( final INotification notification )
 	{
 		SequencerProxy sequencerProxy = ( SequencerProxy ) getFacade ( ).retrieveProxy ( SequencerProxy.NAME );
-		Vector<PatternVO> patterns = sequencerProxy.getPatterns ( );
+		Vector < PatternVO > patterns = sequencerProxy.getPatterns ( );
 
 		/** Create position notes array of new length. */
 		int n = patterns.size ( );
@@ -49,7 +49,7 @@ public class UpdatePositionNotesCommand extends SimpleCommand
 			positionNotes[ i ] = new PatternPositionNote ( );
 			positionNotes[ i ].patternID = patterns.get ( i ).id;
 		}
-		
+
 		sequencerProxy.setPositionNotes ( positionNotes );
 	}
 }

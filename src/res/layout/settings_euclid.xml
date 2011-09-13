@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doc>
+	<panel
+	 	id="panel">
+	 		
+ 		<panel
+ 			background="C7E1EA"
+ 			opaque="true"
+ 			layout="GridBagLayout">
+			 		
+	 		<gridbagconstraints
+				gridx="0"
+				gridy="0"
+	 			weightx="1"
+				insets="0,0,4,0"
+				fill="GridBagConstraints.HORIZONTAL"
+	 			/>
+ 			
+		 	<label
+		 		text="Euclidean Rhythm Settings">
+		 		<gridbagconstraints
+	 				weightx="1"
+	 				insets="8,10,8,0"
+					fill="GridBagConstraints.BOTH"
+		 			/>
+		 	</label>
+		 	
+	 		<button
+		 		id="SETTINGS_BUTTON_EXPAND_EUCLID"
+		 		actioncommand="SETTINGS_BUTTON_EXPAND_EUCLID"
+		 		text="Close">
+		 		<gridbagconstraints
+		 			anchor="GridBagConstraints.LINE_END"
+		 			/>
+		 	</button>
+	 	</panel>
+	 	
+	 	<panel
+	 		id="SETTINGS_CONTENT_PANEL_EUCLID"
+			opaque="false"
+ 			layout="GridBagLayout">
+ 			
+	 		<gridbagconstraints
+				gridx="0"
+				gridy="1"
+	 			weightx="1"
+				insets="0,0,4,0"
+				fill="GridBagConstraints.HORIZONTAL"
+	 			/>
+	 			
+	 		<label
+	 			text="Length">
+		 		<gridbagconstraints
+					gridx="0"
+					gridy="0"
+	 				insets="0,10,0,0"
+					anchor="GridBagConstraints.LINE_START"
+		 			/>
+	 		</label>
+	 			
+		 	<slider
+		 		id="SETTINGS_EUCLID_LENGTH_SLIDER"
+		 		minimum="1"
+		 		maximum="64"
+		 		orientation="SwingConstants.HORIZONTAL"
+		 		preferredsize="100,29">
+		 		<gridbagconstraints
+					gridx="1"
+					gridy="0"
+	 				weightx="1"
+					fill="GridBagConstraints.HORIZONTAL"
+		 			/>
+			</slider>
+	 			
+	 		<label
+		 		id="SETTINGS_EUCLID_LENGTH_TEXT"
+	 			text="0"
+	 			preferredsize="40,24">
+		 		<gridbagconstraints
+					gridx="2"
+					gridy="0"
+					anchor="GridBagConstraints.LINE_END"
+		 			/>
+	 		</label>
+	 			
+	 		<label
+	 			text="Notes">
+		 		<gridbagconstraints
+					gridx="0"
+					gridy="1"
+	 				insets="0,10,0,0"
+					anchor="GridBagConstraints.LINE_START"
+		 			/>
+	 		</label>
+	 			
+		 	<slider
+		 		id="SETTINGS_EUCLID_NOTES_SLIDER"
+		 		minimum="1"
+		 		maximum="64"
+		 		orientation="SwingConstants.HORIZONTAL"
+		 		preferredsize="100,29">
+		 		<gridbagconstraints
+					gridx="1"
+					gridy="1"
+	 				weightx="1"
+					fill="GridBagConstraints.HORIZONTAL"
+		 			/>
+			</slider>
+	 			
+	 		<label
+		 		id="SETTINGS_EUCLID_NOTES_TEXT"
+	 			text="0"
+	 			preferredsize="40,24">
+		 		<gridbagconstraints
+					gridx="2"
+					gridy="1"
+					anchor="GridBagConstraints.LINE_END"
+		 			/>
+	 		</label>
+	 			
+	 		<label
+	 			text="Rotation">
+		 		<gridbagconstraints
+					gridx="0"
+					gridy="2"
+	 				insets="0,10,0,0"
+					anchor="GridBagConstraints.LINE_START"
+		 			/>
+	 		</label>
+	 			
+		 	<slider
+		 		id="SETTINGS_EUCLID_ROTATE_SLIDER"
+		 		minimum="0"
+		 		maximum="64"
+		 		orientation="SwingConstants.HORIZONTAL"
+		 		preferredsize="100,29">
+		 		<gridbagconstraints
+					gridx="1"
+					gridy="2"
+	 				weightx="1"
+					fill="GridBagConstraints.HORIZONTAL"
+		 			/>
+			</slider>
+	 			
+	 		<label
+		 		id="SETTINGS_EUCLID_ROTATE_TEXT"
+	 			text="0"
+	 			preferredsize="40,24">
+		 		<gridbagconstraints
+					gridx="2"
+					gridy="2"
+					anchor="GridBagConstraints.LINE_END"
+		 			/>
+	 		</label>
+		
+		</panel>
+ 	</panel>
+</doc>

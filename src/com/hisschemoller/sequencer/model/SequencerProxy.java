@@ -43,12 +43,14 @@ public class SequencerProxy extends Proxy implements ISequenceable
 {
 	public static final String NAME = SequencerProxy.class.getName ( );
 	private TimerThread _timerThread;
-	private Vector<PatternVO> _patterns = new Vector<PatternVO> ( );
+	private Vector < PatternVO > _patterns = new Vector < PatternVO > ( );
 	private PatternVO _selectedPattern;
 	private long _screenRedrawInterval = 30l;
 	private long _screenRedrawTime;
 	private NoteOffThread [ ][ ] _noteMatrix = new NoteOffThread[ 16 ][ 128 ];
-	private PatternPositionNote [ ] _positionNotes = new PatternPositionNote [ 0 ];
+	private PatternPositionNote [ ] _positionNotes = new PatternPositionNote[ 0 ];
+	private boolean _isMidiEnabled = true;
+	private boolean _isOscEnabled = true;
 
 	public SequencerProxy ( )
 	{
@@ -77,7 +79,7 @@ public class SequencerProxy extends Proxy implements ISequenceable
 			PatternVO patternVO = _patterns.get ( n );
 
 			/** Check if events take place this pulse. */
-			int patternPositionRotationCorrected = ( patternVO.position + ( patternVO.rotation * patternVO.quantization ) ) % patternVO.length;
+			int patternPositionRotationCorrected = ( patternVO.position + ( patternVO.rotation * patternVO.stepLength ) ) % patternVO.patternLength;
 			int m = patternVO.events.size ( );
 			while ( --m > -1 )
 			{
@@ -91,12 +93,12 @@ public class SequencerProxy extends Proxy implements ISequenceable
 					break;
 				}
 			}
-			
+
 			/** Get position for pattern visual to update. */
-			_positionNotes[ n ].position = (float) patternVO.position / patternVO.length;
+			_positionNotes[ n ].position = ( float ) patternVO.position / patternVO.patternLength;
 
 			/** Advance position in pattern. */
-			patternVO.position = ( patternVO.position + 1 ) % patternVO.length;
+			patternVO.position = ( patternVO.position + 1 ) % patternVO.patternLength;
 		}
 
 		/** Check if it's time to update the screen. */
@@ -133,9 +135,12 @@ public class SequencerProxy extends Proxy implements ISequenceable
 		/** Send MIDI Note On notification. */
 		try
 		{
-			ShortMessage shortMessage = new ShortMessage ( );
-			shortMessage.setMessage ( ShortMessage.NOTE_ON, message.getChannel ( ), message.getData1 ( ), message.getData2 ( ) );
-			sendNotification ( SeqNotifications.SEND_MIDI_MESSAGE, shortMessage );
+			if ( _isMidiEnabled )
+			{
+				ShortMessage shortMessage = new ShortMessage ( );
+				shortMessage.setMessage ( ShortMessage.NOTE_ON, message.getChannel ( ), message.getData1 ( ), message.getData2 ( ) );
+				sendNotification ( SeqNotifications.SEND_MIDI_MESSAGE, shortMessage );
+			}
 		}
 		catch ( InvalidMidiDataException exception )
 		{
@@ -143,7 +148,7 @@ public class SequencerProxy extends Proxy implements ISequenceable
 		}
 
 		/** Send view update notification. */
-		PatternSequenceNote note = new PatternSequenceNote ( ( int ) ( midiEvent.getTick ( ) / patternVO.quantization ), ShortMessage.NOTE_ON, patternVO.id );
+		PatternSequenceNote note = new PatternSequenceNote ( ( int ) ( midiEvent.getTick ( ) / patternVO.stepLength ), ShortMessage.NOTE_ON, patternVO.id );
 		sendNotification ( SeqNotifications.PATTERN_SEQUENCE_UPDATED, note );
 	}
 
@@ -157,9 +162,12 @@ public class SequencerProxy extends Proxy implements ISequenceable
 		/** Send MIDI Note Off notification. */
 		try
 		{
-			ShortMessage shortMessage = new ShortMessage ( );
-			shortMessage.setMessage ( ShortMessage.NOTE_OFF, message.getChannel ( ), message.getData1 ( ), message.getData2 ( ) );
-			sendNotification ( SeqNotifications.SEND_MIDI_MESSAGE, shortMessage );
+			if ( _isMidiEnabled )
+			{
+				ShortMessage shortMessage = new ShortMessage ( );
+				shortMessage.setMessage ( ShortMessage.NOTE_OFF, message.getChannel ( ), message.getData1 ( ), message.getData2 ( ) );
+				sendNotification ( SeqNotifications.SEND_MIDI_MESSAGE, shortMessage );
+			}
 		}
 		catch ( InvalidMidiDataException exception )
 		{
@@ -167,7 +175,7 @@ public class SequencerProxy extends Proxy implements ISequenceable
 		}
 
 		/** Send view update notification. */
-		PatternSequenceNote note = new PatternSequenceNote ( ( int ) ( midiEvent.getTick ( ) / patternVO.quantization ), ShortMessage.NOTE_OFF, patternVO.id );
+		PatternSequenceNote note = new PatternSequenceNote ( ( int ) ( midiEvent.getTick ( ) / patternVO.stepLength ), ShortMessage.NOTE_OFF, patternVO.id );
 		sendNotification ( SeqNotifications.PATTERN_SEQUENCE_UPDATED, note );
 	}
 
@@ -205,7 +213,7 @@ public class SequencerProxy extends Proxy implements ISequenceable
 		_screenRedrawTime = new Date ( ).getTime ( );
 	}
 
-	public Vector<PatternVO> getPatterns ( )
+	public Vector < PatternVO > getPatterns ( )
 	{
 		return _patterns;
 	}
@@ -271,13 +279,33 @@ public class SequencerProxy extends Proxy implements ISequenceable
 		return _timerThread.getMillisPerPulse ( );
 	}
 
-	public void setPositionNotes ( PatternPositionNote [ ] _positionNotes )
+	public void setPositionNotes ( PatternPositionNote [ ] positionNotes )
 	{
-		this._positionNotes = _positionNotes;
+		_positionNotes = positionNotes;
 	}
-	
-	public TimerThread getTimerThread()
+
+	public TimerThread getTimerThread ( )
 	{
 		return _timerThread;
+	}
+
+	public boolean getMidiEnabled ( )
+	{
+		return _isMidiEnabled;
+	}
+
+	public void setMidiEnabled ( boolean isMidiEnabled )
+	{
+		_isMidiEnabled = isMidiEnabled;
+	}
+
+	public boolean getOscEnabled ( )
+	{
+		return _isOscEnabled;
+	}
+
+	public void setOscEnabled ( boolean isOscEnabled )
+	{
+		_isOscEnabled = isOscEnabled;
 	}
 }

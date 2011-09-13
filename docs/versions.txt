@@ -1,0 +1,43 @@
+future
+- PureMVC als jar in lib/ in plaats van source files in src/.
+- Varander naam sequencer package in epg.
+- New clock source based on javax.sound.midi.Sequencer.
+- Switch to old clock if no Sequencer available.
+- Preferences save OSC port number.
+- Windows EXE versie.
+- Noot namen bij pitch slider.
+- Triolen.
+- Swing.
+- Arpeggiator.
+- Start / stop naar sequencers zoals live. MIDI.
+- MIDI in.
+- MIDI Clock in.
+- MIDI Clock out.
+- Reverse playback of patterns.
+- Ping pong playback of patterns.
+- Patroon start / stop door note on / off op MIDI in.
+- Patroon start retrigger / continue optie.
+- Betere noot lengte instelling.
+- Icoon voor de Mac APP.
+- Mute / Solo bug.
+- Merge OSC functionaliteit van Michael.
+
+1.1
+- OSC support by Michael Heuer
+- Preferences save window afmeting en locatie.
+- Preferences save MIDI Out port.
+- Preferences save laatste open / save directory.
+- Preferences save MIDI / OSC enabled.
+- Tempo tot 300 BPM.
+- Lengte patroon tot 64 stappen.
+- UI met SwiXML maken.
+- OSC / MIDI keuze.
+- MIDI All Notes Off knop.
+- Help tekst in extern HTML bestand.
+- Step duration ½, ¼, 1/8, 1/16, 1/32.
+- Nieuw patroon begint met velocity=10.
+- Patronen naam kunnen geven.
+
+1.0
+- Project available on GitHub.
+- GPL v3 license.

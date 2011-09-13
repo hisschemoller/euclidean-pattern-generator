@@ -40,6 +40,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.puremvc.java.multicore.interfaces.INotification;
 import org.puremvc.java.multicore.patterns.command.SimpleCommand;
+import org.w3c.dom.CDATASection;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -102,11 +103,12 @@ public class SaveProjectCommand extends SimpleCommand
 				midi.setAttribute ( "channel", Integer.toString ( patternVO.midiChannel ) );
 				midi.setAttribute ( "pitch", Integer.toString ( patternVO.midiPitch ) );
 				midi.setAttribute ( "velocity", Integer.toString ( patternVO.midiVelocity ) );
-				midi.setAttribute ( "notelength", Integer.toString ( patternVO.noteLength ) );
 				patternNode.appendChild ( midi );
 
 				/** Add settings element. */
 				Element settings = document.createElement ( "settings" );
+				settings.setAttribute ( "notelength", Integer.toString ( patternVO.noteLength ) );
+				settings.setAttribute ( "quantization", Integer.toString ( patternVO.quantization ) );
 				settings.setAttribute ( "solo", Boolean.toString ( patternVO.solo ) );
 				settings.setAttribute ( "mute", Boolean.toString ( patternVO.mute ) );
 				patternNode.appendChild ( settings );
@@ -116,6 +118,12 @@ public class SaveProjectCommand extends SimpleCommand
 				location.setAttribute ( "x", Integer.toString ( patternVO.viewX ) );
 				location.setAttribute ( "y", Integer.toString ( patternVO.viewY ) );
 				patternNode.appendChild ( location );
+				
+				/** Add name element. */
+				Element name = document.createElement ( "name" );
+				CDATASection cdataName = document.createCDATASection ( patternVO.name );
+				name.appendChild ( cdataName );
+				patternNode.appendChild ( name );
 			}
 
 			return document;
@@ -162,7 +170,7 @@ public class SaveProjectCommand extends SimpleCommand
 		{
 			JFileChooser fileChooser = fileProxy.getFileChooser ( );
 			fileChooser.setDialogTitle ( "Save Project File" );
-			fileChooser.setSelectedFile ( new File ( "Euclidean Sequencer Project.xml" ) );
+			fileChooser.setSelectedFile ( new File ( "Euclidean-Patterns-Project.xml" ) );
 			int returnVal = fileChooser.showSaveDialog ( fileProxy.getDialogParent ( ) );
 
 			if ( returnVal == JFileChooser.APPROVE_OPTION )

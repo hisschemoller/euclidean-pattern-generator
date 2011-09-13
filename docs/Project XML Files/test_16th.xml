@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project ppqn="24" tempo="120.0">
+<patterns>
+<pattern id="7e8d523c-3967-4331-8769-5b15090b65df">
+<events notes="4" rotation="0" steps="16"/>
+<midi channel="0" pitch="60" velocity="100"/>
+<settings mute="false" notelength="6" quantization="16" solo="false"/>
+<location x="49" y="24"/>
+</pattern>
+</patterns>
+</project>

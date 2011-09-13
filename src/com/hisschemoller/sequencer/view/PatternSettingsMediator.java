@@ -20,14 +20,14 @@
 
 package com.hisschemoller.sequencer.view;
 
-import java.awt.Dimension;
-
 import org.puremvc.java.multicore.interfaces.INotification;
 import org.puremvc.java.multicore.patterns.mediator.Mediator;
 
 import com.hisschemoller.sequencer.model.vo.PatternVO;
 import com.hisschemoller.sequencer.notification.SeqNotifications;
+import com.hisschemoller.sequencer.util.EPGSwingEngine;
 import com.hisschemoller.sequencer.view.components.PatternSettings;
+import com.hisschemoller.sequencer.view.components.SettingsPanels;
 import com.hisschemoller.sequencer.view.events.IViewEventListener;
 import com.hisschemoller.sequencer.view.events.ViewEvent;
 
@@ -35,21 +35,22 @@ public class PatternSettingsMediator extends Mediator implements IViewEventListe
 {
 	public static final String NAME = PatternSettingsMediator.class.getName ( );
 
-	public PatternSettingsMediator ( String mediatorName, Object viewComponent )
+	public PatternSettingsMediator ( Object viewComponent )
 	{
 		super ( NAME, viewComponent );
 	}
 
-	public String [ ] listNotificationInterests ()
+	public String [ ] listNotificationInterests ( )
 	{
-		String [ ] interests = new String[ 7 ];
+		String [ ] interests = new String[ 8 ];
 		interests[ 0 ] = SeqNotifications.PATTERN_SETTINGS_UPDATED;
 		interests[ 1 ] = SeqNotifications.MIDI_SETTINGS_UPDATED;
-		interests[ 2 ] = SeqNotifications.PATTERN_SETTINGS_OPENED;
-		interests[ 3 ] = SeqNotifications.SELECT_PATTERN;
+		interests[ 2 ] = SeqNotifications.SELECT_PATTERN;
+		interests[ 3 ] = SeqNotifications.PATTERN_QUANTIZATION_UPDATED;
 		interests[ 4 ] = SeqNotifications.PATTERN_SOLOED;
 		interests[ 5 ] = SeqNotifications.PATTERN_MUTED;
-		interests[ 6 ] = SeqNotifications.RESOLUTION_UPDATED;
+		interests[ 6 ] = SeqNotifications.PATTERN_NAME_UPDATED;
+		interests[ 7 ] = SeqNotifications.RESOLUTION_UPDATED;
 		return interests;
 	}
 
@@ -57,52 +58,53 @@ public class PatternSettingsMediator extends Mediator implements IViewEventListe
 	{
 		if ( note.getName ( ) == SeqNotifications.PATTERN_SETTINGS_UPDATED )
 		{
-			getView ( ).updateSettings ( (PatternVO) note.getBody ( ) );
+			getView ( ).updateSettings ( ( PatternVO ) note.getBody ( ) );
 		}
 		else if ( note.getName ( ) == SeqNotifications.MIDI_SETTINGS_UPDATED )
 		{
-			getView ( ).updateSettings ( (PatternVO) note.getBody ( ) );
-		}
-		else if ( note.getName ( ) == SeqNotifications.PATTERN_SETTINGS_OPENED )
-		{
-			// getView ( ).updatePattern ( (PatternVO) note.getBody ( ) );
+			getView ( ).updateSettings ( ( PatternVO ) note.getBody ( ) );
 		}
 		else if ( note.getName ( ) == SeqNotifications.SELECT_PATTERN )
 		{
-			getView ( ).updatePattern ( (PatternVO) note.getBody ( ) );
+			getView ( ).updatePattern ( ( PatternVO ) note.getBody ( ) );
+		}
+		else if ( note.getName ( ) == SeqNotifications.PATTERN_QUANTIZATION_UPDATED )
+		{
+			getView ( ).updatePattern ( ( PatternVO ) note.getBody ( ) );
 		}
 		else if ( note.getName ( ) == SeqNotifications.PATTERN_SOLOED )
 		{
-			getView ( ).soloPattern ( (PatternVO) note.getBody ( ) );
+			getView ( ).soloPattern ( ( PatternVO ) note.getBody ( ) );
 		}
 		else if ( note.getName ( ) == SeqNotifications.PATTERN_MUTED )
 		{
-			getView ( ).mutePattern ( (PatternVO) note.getBody ( ) );
+			getView ( ).mutePattern ( ( PatternVO ) note.getBody ( ) );
+		}
+		else if ( note.getName ( ) == SeqNotifications.PATTERN_NAME_UPDATED )
+		{
+			getView ( ).updatePattern ( ( PatternVO ) note.getBody ( ) );
 		}
 		else if ( note.getName ( ) == SeqNotifications.RESOLUTION_UPDATED )
 		{
-			getView ( ).updateResolution ( (Integer) note.getBody ( ) );
+			getView ( ).updateResolution ( ( Integer ) note.getBody ( ) );
 		}
 	}
 
-	@Override public final void onRegister ()
+	@Override public final void onRegister ( )
 	{
 		super.onRegister ( );
 
-		PatternSettings settings = new PatternSettings ( );
-		settings.setSize ( 280, 400 );
-		settings.setPreferredSize ( new Dimension ( 280, 400 ) );
-		settings.setMinimumSize ( new Dimension ( 280, 400 ) );
+		EPGSwingEngine swingEngine = ( EPGSwingEngine ) viewComponent;
+		PatternSettings settings = new PatternSettings ( swingEngine );
 		settings.addViewEventListener ( this );
-
 		setViewComponent ( settings );
 
-		sendNotification ( SeqNotifications.ADD_PATTERN_SETTINGS, getView ( ) );
+		new SettingsPanels ( swingEngine );
 	}
 
 	public void viewEventHandler ( ViewEvent event )
 	{
-		switch (event.getID ( ))
+		switch ( event.getID ( ) )
 		{
 		case ViewEvent.MIDI_SETTINGS_CHANGE:
 			sendNotification ( SeqNotifications.UPDATE_MIDI_SETTINGS, getView ( ).getSettings ( ) );
@@ -110,6 +112,10 @@ public class PatternSettingsMediator extends Mediator implements IViewEventListe
 
 		case ViewEvent.PATTERN_SETTINGS_CHANGE:
 			sendNotification ( SeqNotifications.UPDATE_PATTERN_SETTINGS, getView ( ).getSettings ( ) );
+			break;
+
+		case ViewEvent.QUANTIZATION:
+			sendNotification ( SeqNotifications.UPDATE_PATTERN_QUANTIZATION, getView ( ).getSettings ( ) );
 			break;
 
 		case ViewEvent.DELETE_PATTERN:
@@ -124,6 +130,10 @@ public class PatternSettingsMediator extends Mediator implements IViewEventListe
 			sendNotification ( SeqNotifications.SOLO_PATTERN, getView ( ).getSettings ( ) );
 			break;
 
+		case ViewEvent.NAME_CHANGE:
+			sendNotification ( SeqNotifications.UPDATE_PATTERN_NAME, getView ( ).getSettings ( ) );
+			break;
+
 		default:
 			System.out.println ( "ControlsMediator - Unhandled ViewEvent with id: " + event.getID ( ) );
 			break;
@@ -131,8 +141,8 @@ public class PatternSettingsMediator extends Mediator implements IViewEventListe
 
 	}
 
-	private PatternSettings getView ()
+	private PatternSettings getView ( )
 	{
-		return (PatternSettings) viewComponent;
+		return ( PatternSettings ) viewComponent;
 	}
 }

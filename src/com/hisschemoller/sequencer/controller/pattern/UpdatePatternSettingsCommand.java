@@ -60,7 +60,7 @@ public class UpdatePatternSettingsCommand extends SimpleCommand
 				settingsVO.fills = Math.min ( settingsVO.fills, settingsVO.steps );
 
 				/** Adjust length (measured in PPQN). */
-				patternVO.length = settingsVO.steps * patternVO.quantization;
+				patternVO.patternLength = settingsVO.steps * patternVO.stepLength;
 
 				/** Generate the Euclid / Bjorklund pattern. */
 				ArrayList<Boolean> pattern = BjorklundGenerator2.generate ( settingsVO.steps, settingsVO.fills );
@@ -82,7 +82,7 @@ public class UpdatePatternSettingsCommand extends SimpleCommand
 							ShortMessage sourceMessage = ( ShortMessage ) sourceMidiEvent.getMessage ( );
 							ShortMessage message = new ShortMessage ( );
 							message.setMessage ( sourceMessage.getStatus ( ), sourceMessage.getChannel ( ), sourceMessage.getData1 ( ), sourceMessage.getData2 ( ) );
-							MidiEvent midiEvent = new MidiEvent ( message, i * patternVO.quantization );
+							MidiEvent midiEvent = new MidiEvent ( message, i * patternVO.stepLength );
 							patternVO.events.add ( midiEvent );
 						}
 					}

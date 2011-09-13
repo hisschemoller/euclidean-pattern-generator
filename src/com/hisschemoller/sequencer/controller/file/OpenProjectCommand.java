@@ -47,6 +47,7 @@ import com.hisschemoller.sequencer.model.SequencerProxy;
 import com.hisschemoller.sequencer.model.vo.PatternVO;
 import com.hisschemoller.sequencer.notification.SeqNotifications;
 import com.hisschemoller.sequencer.util.BjorklundGenerator2;
+import com.hisschemoller.sequencer.util.SequencerEnums.Quantization;
 
 public class OpenProjectCommand extends SimpleCommand
 {
@@ -84,7 +85,6 @@ public class OpenProjectCommand extends SimpleCommand
 		{
 			showMessage ( "OpenProjectCommand.execute() ParserConfigurationException: " + exception.getMessage ( ) );
 		}
-
 	}
 
 	/**
@@ -101,6 +101,7 @@ public class OpenProjectCommand extends SimpleCommand
 		catch ( Exception exception )
 		{
 			showMessage ( "OpenProjectCommand.parseXML: IOException, SAXException or IllegalArgumentException: " + exception.getMessage ( ) );
+			exception.printStackTrace ( );
 		}
 	}
 
@@ -134,7 +135,7 @@ public class OpenProjectCommand extends SimpleCommand
 		float tempo = Float.parseFloat ( documentElement.getAttribute ( "tempo" ) );
 		sendNotification ( SeqNotifications.UPDATE_TEMPO, ( tempo > 0 ) ? tempo : 120 );
 
-		Vector<PatternVO> patterns = sequencerProxy.getPatterns ( );
+		Vector < PatternVO > patterns = sequencerProxy.getPatterns ( );
 
 		/** Loop through the patterns. */
 		for ( int j = 0; j < patternNodes.getLength ( ); j++ )
@@ -144,7 +145,7 @@ public class OpenProjectCommand extends SimpleCommand
 			if ( patternNode.getNodeType ( ) == Node.ELEMENT_NODE )
 			{
 				Element pattern = ( Element ) patternNode;
-				patterns.add ( createPattern ( pattern, ppqn / 4 ) );
+				patterns.add ( createPattern ( pattern, sequencerProxy ) );
 			}
 		}
 
@@ -152,7 +153,7 @@ public class OpenProjectCommand extends SimpleCommand
 		sequencerProxy.setSelectedPattern ( patterns.get ( 0 ) );
 
 		/** Notify so patterns will be drawn. */
-		Vector<PatternVO> allPatterns = sequencerProxy.getPatterns ( );
+		Vector < PatternVO > allPatterns = sequencerProxy.getPatterns ( );
 		for ( int i = 0; i < allPatterns.size ( ); i++ )
 		{
 			sendNotification ( SeqNotifications.PATTERN_CREATED, allPatterns.get ( i ), Boolean.toString ( false ) );
@@ -169,7 +170,7 @@ public class OpenProjectCommand extends SimpleCommand
 	/**
 	 * Create pattern VO from XML.
 	 */
-	private PatternVO createPattern ( Element pattern, int quantization )
+	private PatternVO createPattern ( Element pattern, SequencerProxy sequencerProxy )
 	{
 		PatternVO patternVO = new PatternVO ( );
 
@@ -203,7 +204,6 @@ public class OpenProjectCommand extends SimpleCommand
 				patternVO.midiChannel = Integer.parseInt ( midi.getAttribute ( "channel" ) );
 				patternVO.midiPitch = Integer.parseInt ( midi.getAttribute ( "pitch" ) );
 				patternVO.midiVelocity = Integer.parseInt ( midi.getAttribute ( "velocity" ) );
-				patternVO.noteLength = Integer.parseInt ( midi.getAttribute ( "notelength" ) );
 			}
 		}
 
@@ -213,6 +213,13 @@ public class OpenProjectCommand extends SimpleCommand
 			Element settings = ( Element ) settingsList.item ( 0 );
 			if ( settings.getNodeType ( ) == Node.ELEMENT_NODE )
 			{
+				String notelength = settings.getAttribute ( "notelength" );
+				String quantization = settings.getAttribute ( "quantization" );
+				
+				patternVO.noteLength = notelength.equals ( "" ) ? sequencerProxy.getPulsesPerQuarterNote ( ) / 4 : Integer.parseInt ( notelength );
+				patternVO.quantization = quantization.equals ( "" ) ? Quantization.Q16.getValue ( ) : Integer.parseInt ( quantization );
+				patternVO.stepLength = ( sequencerProxy.getPulsesPerQuarterNote ( ) * 4 ) / patternVO.quantization;
+				patternVO.patternLength = patternVO.steps * patternVO.stepLength;
 				patternVO.solo = Boolean.parseBoolean ( settings.getAttribute ( "solo" ) );
 				patternVO.mute = Boolean.parseBoolean ( settings.getAttribute ( "mute" ) );
 			}
@@ -229,12 +236,20 @@ public class OpenProjectCommand extends SimpleCommand
 			}
 		}
 
-		patternVO.quantization = quantization;
-		patternVO.length = patternVO.steps * quantization;
+		NodeList nameList = pattern.getElementsByTagName ( "name" );
+		if ( nameList.getLength ( ) > 0 )
+		{
+			Element name = ( Element ) nameList.item ( 0 );
+			if ( name.getNodeType ( ) == Node.ELEMENT_NODE )
+			{
+				patternVO.name = name.getTextContent ( );
+			}
+		}
+		
 		patternVO.position = 0;
 
 		/** Generate the Euclid / Bjorklund pattern. */
-		ArrayList<Boolean> bjorklund = BjorklundGenerator2.generate ( patternVO.steps, patternVO.fills );
+		ArrayList < Boolean > bjorklund = BjorklundGenerator2.generate ( patternVO.steps, patternVO.fills );
 
 		/** Add events to the pattern. */
 		for ( int i = 0; i < patternVO.steps; i++ )
@@ -245,7 +260,7 @@ public class OpenProjectCommand extends SimpleCommand
 				{
 					ShortMessage message = new ShortMessage ( );
 					message.setMessage ( ShortMessage.NOTE_ON, patternVO.midiChannel, patternVO.midiPitch, patternVO.midiVelocity );
-					MidiEvent midiEvent = new MidiEvent ( message, i * patternVO.quantization );
+					MidiEvent midiEvent = new MidiEvent ( message, i * patternVO.stepLength );
 
 					patternVO.events.add ( midiEvent );
 				}

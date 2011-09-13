@@ -22,6 +22,7 @@ package com.hisschemoller.sequencer.view.components;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
@@ -41,16 +42,15 @@ public class PatternPainter
 	private static final Color COLOR_DDDDDD = new Color ( 0xDDDDDD );
 	private static final Color COLOR_CCCCCC = new Color ( 0xCCCCCC );
 	private static final Color COLOR_999999 = new Color ( 0x999999 );
+	private static final Color COLOR_666666 = new Color ( 0x666666 );
 	private static final Color COLOR_333333 = new Color ( 0x333333 );
 	private static final Color COLOR_11000000 = new Color ( 0x11000000, true );
 	private static final float CENTER_RADIUS = 20;
 	private static final float ZERO_RADIUS = 2;
-	private static final float ZERO_DISTANCE = 61;
 	private static final int STEP_ANIMATION_DURATION = 10;
-	private static final int STEP_CIRCLE_RADIUS = 50;
-	protected static final int STEP_RADIUS = 5;
+	private static final int MINIMUM_STEP_CIRCLE_RADIUS = 50;
+	protected static final int MAXIMUM_STEP_RADIUS = 5;
 	protected static final int STEP_TILE_SIZE = 26;
-	protected static final int POINTER_LENGTH = 50;
 	protected static final int POINTER_LENGTH_MUTE = 25;
 	private BufferedImage _image;
 	private Ellipse2D.Float _center;
@@ -63,13 +63,20 @@ public class PatternPainter
 	private Pattern _pattern;
 	private Boolean [ ] _selections;
 	private Ellipse2D.Float[] _steps;
-	private ArrayList<AnimatedStep> _animatedSteps = new ArrayList<AnimatedStep> ( );
+	private ArrayList < AnimatedStep > _animatedSteps = new ArrayList < AnimatedStep > ( );
 	private BufferedImage [ ] _stepAnimation;
+	private FontMetrics _fontMetrics;
+	private String _name = "";
+	private float _nameX;
+	private float _nameHeight;
 	private float _interval;
 	private int _numSteps;
 	private float _centerRadius = CENTER_RADIUS;
-	private float _stepCircleRadius = STEP_CIRCLE_RADIUS;
-	private float _pointerLength = POINTER_LENGTH;
+	private float _stepCircleRadius;
+	protected float _stepRadius;
+	private float _finalStepCircleRadius = MINIMUM_STEP_CIRCLE_RADIUS;
+	private float _pointerLength;
+	private float _zeroDistance;
 	private boolean _selected = false;
 	private boolean _drawFlag = false;
 	private boolean _mute = false;
@@ -80,6 +87,8 @@ public class PatternPainter
 		_pattern = pattern;
 		_center = new Ellipse2D.Float ( -_centerRadius, -_centerRadius, _centerRadius * 2, _centerRadius * 2 );
 		_select = new Ellipse2D.Float ( _center.x + 4, _center.y + 4, _center.width - 8, _center.height - 8 );
+		_fontMetrics = _pattern.getFontMetrics ( _pattern.getFont ( ) );
+		_nameHeight = _fontMetrics.getHeight ( );
 
 		/** Create the step animation images. */
 		_stepAnimation = new BufferedImage[ STEP_ANIMATION_DURATION ];
@@ -87,7 +96,7 @@ public class PatternPainter
 		{
 			BufferedImage image = new BufferedImage ( STEP_TILE_SIZE, STEP_TILE_SIZE, BufferedImage.TYPE_INT_ARGB );
 			_stepAnimation[ i ] = image;
-			float radius = STEP_RADIUS + ( 5f * ( ( float ) ( STEP_ANIMATION_DURATION - i ) / STEP_ANIMATION_DURATION ) );
+			float radius = MAXIMUM_STEP_RADIUS + ( 5f * ( ( float ) ( STEP_ANIMATION_DURATION - i ) / STEP_ANIMATION_DURATION ) );
 			Ellipse2D.Float step = new Ellipse2D.Float ( -radius, -radius, radius * 2, radius * 2 );
 			Graphics2D graphics2 = ( Graphics2D ) image.getGraphics ( );
 			graphics2.setRenderingHint ( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
@@ -118,7 +127,7 @@ public class PatternPainter
 
 		graphics2.translate ( Pattern.PANEL_SIZE / 2, Pattern.PANEL_SIZE / 2 );
 
-		/** Draw step animations. */
+		/** Draw step animations (if any). */
 		int n = _animatedSteps.size ( );
 		while ( --n > -1 )
 		{
@@ -145,13 +154,18 @@ public class PatternPainter
 		_selections = selections.clone ( );
 		_steps = new Ellipse2D.Float[ _numSteps ];
 		_polygon = new Polygon ( );
-		
+		_finalStepCircleRadius = MINIMUM_STEP_CIRCLE_RADIUS + ( Math.max ( 0, _numSteps - 16 ) * 0.6f );
+		_stepCircleRadius = _finalStepCircleRadius;
+		_stepRadius = MAXIMUM_STEP_RADIUS - ( Math.max ( 0, _numSteps - 16 ) * 0.04f );
+		_zeroDistance = _stepCircleRadius + 11;
+		_pointerLength = _stepCircleRadius - 4;
+
 		for ( int i = 0; i < _numSteps; i++ )
 		{
 			float angle = i * _interval;
 			int stepX = ( int ) ( Math.sin ( angle ) * _stepCircleRadius );
 			int stepY = ( int ) ( Math.cos ( angle ) * -_stepCircleRadius );
-			_steps[ i ] = new Ellipse2D.Float ( stepX - STEP_RADIUS, stepY - STEP_RADIUS, STEP_RADIUS * 2, STEP_RADIUS * 2 );
+			_steps[ i ] = new Ellipse2D.Float ( stepX - _stepRadius, stepY - _stepRadius, _stepRadius * 2, _stepRadius * 2 );
 
 			if ( _selections[ i ] )
 			{
@@ -159,6 +173,7 @@ public class PatternPainter
 			}
 		}
 
+		updatePointer ( );
 		drawImage ( );
 	}
 
@@ -166,10 +181,10 @@ public class PatternPainter
 	{
 		_drawFlag = rotation != 0;
 
-		/** Update zero. */
+		/** Update zero symbol. */
 		float position = _interval * ( _numSteps - rotation );
-		float locationX = -ZERO_RADIUS + ( float ) ( Math.sin ( position ) * ZERO_DISTANCE );
-		float locationY = -ZERO_RADIUS + ( float ) ( Math.cos ( position ) * -ZERO_DISTANCE );
+		float locationX = -ZERO_RADIUS + ( float ) ( Math.sin ( position ) * _zeroDistance );
+		float locationY = -ZERO_RADIUS + ( float ) ( Math.cos ( position ) * -_zeroDistance );
 		_zero = new Ellipse2D.Float ( locationX, locationY, ZERO_RADIUS * 2, ZERO_RADIUS * 2 );
 
 		drawImage ( );
@@ -191,7 +206,7 @@ public class PatternPainter
 	public void setPointerMute ( boolean mute )
 	{
 		_mute = mute;
-		_pointerLength = ( _mute ) ? POINTER_LENGTH_MUTE : POINTER_LENGTH;
+		_pointerLength = ( _mute ) ? POINTER_LENGTH_MUTE : _stepCircleRadius - 4;
 		updatePointer ( );
 	}
 
@@ -215,46 +230,53 @@ public class PatternPainter
 		drawImage ( );
 	}
 
-	public void updateStartAnimation ( float position )
+	public void setName ( String name )
+	{
+		_name = name;
+		_nameX = _fontMetrics.stringWidth ( _name ) / -2f;
+		drawImage ( );
+	}
+
+	public void updateStartupAnimation ( float position )
 	{
 		/** _center and _select */
 		_centerRadius = CENTER_RADIUS * ( 0.2f + position * 0.8f );
 		_center = new Ellipse2D.Float ( -_centerRadius, -_centerRadius, _centerRadius * 2, _centerRadius * 2 );
 		_select = new Ellipse2D.Float ( _center.x + 4, _center.y + 4, _center.width - 8, _center.height - 8 );
-		
+
 		/** _polygon and _steps */
 		_steps = new Ellipse2D.Float[ _numSteps ];
 		_polygon = new Polygon ( );
 		for ( int i = 0; i < _numSteps; i++ )
 		{
-			_stepCircleRadius = STEP_CIRCLE_RADIUS * ( 0.01f + position * 0.99f );
+			_stepCircleRadius = _finalStepCircleRadius * ( 0.01f + ( position * 0.99f ) );
 			float angle = i * _interval;
 			int stepX = ( int ) ( Math.sin ( angle ) * _stepCircleRadius );
 			int stepY = ( int ) ( Math.cos ( angle ) * -_stepCircleRadius );
-			_steps[ i ] = new Ellipse2D.Float ( stepX - STEP_RADIUS, stepY - STEP_RADIUS, STEP_RADIUS * 2, STEP_RADIUS * 2 );
+			_steps[ i ] = new Ellipse2D.Float ( stepX - _stepRadius, stepY - _stepRadius, _stepRadius * 2, _stepRadius * 2 );
 
 			if ( _selections[ i ] )
 			{
 				_polygon.addPoint ( stepX, stepY );
 			}
 		}
-		
+
 		/** _pointer */
-		float fullLength = ( _mute ) ? POINTER_LENGTH_MUTE : POINTER_LENGTH;
+		float fullLength = ( _mute ) ? POINTER_LENGTH_MUTE : _stepCircleRadius - 4;
 		_pointerLength = fullLength * ( 0.01f + position * 0.99f );
 		updatePointer ( );
-		
+
 		/** _zero and _flag */
-		if( position >= 1 )
+		if ( position >= 1 )
 		{
 			float pos = _interval * ( _numSteps - 0 );
-			float locationX = -ZERO_RADIUS + ( float ) ( Math.sin ( pos ) * ZERO_DISTANCE );
-			float locationY = -ZERO_RADIUS + ( float ) ( Math.cos ( pos ) * -ZERO_DISTANCE );
+			float locationX = -ZERO_RADIUS + ( float ) ( Math.sin ( pos ) * _zeroDistance );
+			float locationY = -ZERO_RADIUS + ( float ) ( Math.cos ( pos ) * -_zeroDistance );
 			_zero = new Ellipse2D.Float ( locationX, locationY, ZERO_RADIUS * 2, ZERO_RADIUS * 2 );
 		}
 		else
 		{
-			_zero = (Ellipse2D.Float) _center.clone ( );
+			_zero = ( Ellipse2D.Float ) _center.clone ( );
 		}
 
 		drawImage ( );
@@ -328,9 +350,18 @@ public class PatternPainter
 			/** Draw the flag. */
 			if ( _drawFlag )
 			{
-				graphics2.drawLine ( 0, -64, 0, -58 );
-				graphics2.drawLine ( 4, -62, 0, -64 );
-				graphics2.drawLine ( 0, -60, 4, -62 );
+				graphics2.translate ( 0, -_stepCircleRadius - 11 );
+				graphics2.drawLine ( 0, -3, 0, 3 );
+				graphics2.drawLine ( 4, -1, 0, -3 );
+				graphics2.drawLine ( 0, 1, 4, -1 );
+				graphics2.translate ( 0, _stepCircleRadius + 11 );
+			}
+
+			/** Draw the pattern name. */
+			if ( !_name.equals ( "" ) )
+			{
+				graphics2.setColor ( COLOR_666666 );
+				graphics2.drawString ( _name, _nameX, _stepCircleRadius + 4f + _nameHeight );
 			}
 
 			graphics2.dispose ( );
@@ -340,7 +371,7 @@ public class PatternPainter
 
 final class AnimatedStep
 {
-	public static final float POSITION_OFFSET = PatternPainter.STEP_RADIUS - ( PatternPainter.STEP_TILE_SIZE / 2 );
+	public static final float POSITION_OFFSET = PatternPainter.MAXIMUM_STEP_RADIUS - ( PatternPainter.STEP_TILE_SIZE / 2 );
 	public int x;
 	public int y;
 	public int clock = 0;
