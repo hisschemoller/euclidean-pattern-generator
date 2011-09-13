@@ -20,14 +20,18 @@
 
 package com.hisschemoller.sequencer.view;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+
 import javax.sound.midi.MidiDevice;
-import javax.swing.JCheckBox;
+import javax.swing.JFrame;
 
 import org.puremvc.java.multicore.interfaces.INotification;
 import org.puremvc.java.multicore.patterns.mediator.Mediator;
 
 import com.hisschemoller.sequencer.notification.SeqNotifications;
-import com.hisschemoller.sequencer.util.EPGSwingEngine;
 import com.hisschemoller.sequencer.util.SequencerEnums;
 import com.hisschemoller.sequencer.view.components.Controls;
 import com.hisschemoller.sequencer.view.events.IViewEventListener;
@@ -35,30 +39,31 @@ import com.hisschemoller.sequencer.view.events.ViewEvent;
 
 public class ControlsMediator extends Mediator implements IViewEventListener
 {
-	public static final String NAME = ControlsMediator.class.getName ( );
+	public static final String NAME = "ControlsMediator";
 
-	public ControlsMediator ( Object viewComponent )
+	public ControlsMediator ( String mediatorName, Object viewComponent )
 	{
 		super ( NAME, viewComponent );
 	}
 
 	public String [ ] listNotificationInterests ( )
 	{
-		String [ ] interests = new String[ 7 ];
-		interests[ 0 ] = SeqNotifications.TEMPO_UPDATED;
-		interests[ 1 ] = SeqNotifications.PLAYBACK_CHANGED;
-		interests[ 2 ] = SeqNotifications.RESOLUTION_UPDATED;
-		interests[ 3 ] = SeqNotifications.MIDI_DEVICES_UPDATED;
-		interests[ 4 ] = SeqNotifications.MIDI_OUT_DEVICE_OPENED;
-		interests[ 5 ] = SeqNotifications.MIDI_OUT_DEVICE_ENABLED;
-		interests[ 6 ] = SeqNotifications.OSC_DEVICE_ENABLED;
+		String [ ] interests = new String[ 4 ];
+		interests[ 0 ] = SeqNotifications.MIDI_DEVICES_UPDATED;
+		interests[ 1 ] = SeqNotifications.TEMPO_UPDATED;
+		interests[ 2 ] = SeqNotifications.PLAYBACK_CHANGED;
+		interests[ 3 ] = SeqNotifications.RESOLUTION_UPDATED;
 		return interests;
 	}
 
 	public void handleNotification ( INotification note )
 	{
 		String name = note.getName ( );
-		if ( name == SeqNotifications.TEMPO_UPDATED )
+		if ( name == SeqNotifications.MIDI_DEVICES_UPDATED )
+		{
+			getView ( ).updateMidiDevices ( ( MidiDevice.Info[] ) note.getBody ( ) );
+		}
+		else if ( name == SeqNotifications.TEMPO_UPDATED )
 		{
 			getView ( ).updateTempo ( ( Float ) note.getBody ( ) );
 		}
@@ -68,23 +73,7 @@ public class ControlsMediator extends Mediator implements IViewEventListener
 		}
 		else if ( note.getName ( ) == SeqNotifications.RESOLUTION_UPDATED )
 		{
-			getView ( ).updateResolution ( ( Integer ) note.getBody ( ) );
-		}
-		else if ( name == SeqNotifications.MIDI_DEVICES_UPDATED )
-		{
-			getView ( ).updateMidiDevices ( ( MidiDevice.Info[] ) note.getBody ( ) );
-		}
-		else if ( name == SeqNotifications.MIDI_OUT_DEVICE_OPENED )
-		{
-			getView ( ).setMidiOutDevice ( ( MidiDevice.Info ) note.getBody ( ) );
-		}
-		else if ( name == SeqNotifications.MIDI_OUT_DEVICE_ENABLED )
-		{
-			getView ( ).updateMidiOutEnabled ( ( Boolean ) note.getBody ( ) );
-		}
-		else if ( name == SeqNotifications.OSC_DEVICE_ENABLED )
-		{
-			getView ( ).updateOscEnabled ( ( Boolean ) note.getBody ( ) );
+			getView ( ).updateResolution ( (Integer) note.getBody ( ) );
 		}
 	}
 
@@ -92,9 +81,22 @@ public class ControlsMediator extends Mediator implements IViewEventListener
 	{
 		super.onRegister ( );
 
-		EPGSwingEngine swingEngine = ( EPGSwingEngine ) viewComponent;
-		Controls controls = new Controls ( swingEngine );
+		JFrame jFrame = ( JFrame ) viewComponent;
+
+		GridBagConstraints constraints = new GridBagConstraints ( );
+		Controls controls = new Controls ( );
 		controls.addViewEventListener ( this );
+		controls.setBackground ( new Color ( 0xFFCCCC ) );
+		controls.setPreferredSize ( new Dimension ( 500, 100 ) );
+		controls.setMinimumSize ( new Dimension ( 500, 100 ) );
+		controls.setMaximumSize ( new Dimension ( 500, 100 ) );
+		// constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.weightx = 0;
+		constraints.weighty = 0;
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		constraints.insets = new Insets ( 6, 6, 3, 3 );
+		jFrame.add ( controls, constraints );
 		setViewComponent ( controls );
 	}
 
@@ -110,25 +112,12 @@ public class ControlsMediator extends Mediator implements IViewEventListener
 			sendNotification ( SeqNotifications.CHANGE_PLAYBACK, getView ( ).getPlayButtonState ( ) );
 			break;
 
-		case ViewEvent.ALL_NOTES_OFF:
-			sendNotification ( SeqNotifications.SEND_MIDI_ALL_NOTES_OFF );
+		case ViewEvent.MIDI_IN_DEVICE_SELECT:
+			sendNotification ( SeqNotifications.OPEN_MIDI_IN_DEVICE, getView ( ).getMidiInSelectedItem ( ) );
 			break;
-
-		// case ViewEvent.MIDI_IN_DEVICE_SELECT:
-		// sendNotification ( SeqNotifications.OPEN_MIDI_IN_DEVICE, getView (
-		// ).getMidiInSelectedItem ( ) );
-		// break;
 
 		case ViewEvent.MIDI_OUT_DEVICE_SELECT:
 			sendNotification ( SeqNotifications.OPEN_MIDI_OUT_DEVICE, getView ( ).getMidiOutSelectedItem ( ) );
-			break;
-
-		case ViewEvent.MIDI_CHECKBOX_SELECT:
-			sendNotification ( SeqNotifications.ENABLE_MIDI_OUT_DEVICE, ( ( JCheckBox ) event.getSource ( ) ).isSelected ( ) );
-			break;
-
-		case ViewEvent.OSC_CHECKBOX_SELECT:
-			sendNotification ( SeqNotifications.ENABLE_OSC_DEVICE, ( ( JCheckBox ) event.getSource ( ) ).isSelected ( ) );
 			break;
 
 		default:

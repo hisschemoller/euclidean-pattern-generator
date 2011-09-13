@@ -34,7 +34,7 @@ public class MenuBarMediator extends Mediator implements ActionListener
 {
 	public static final String NAME = MenuBarMediator.class.getName ( );
 
-	public MenuBarMediator ( Object viewComponent )
+	public MenuBarMediator ( String mediatorName, Object viewComponent )
 	{
 		super ( NAME, viewComponent );
 	}

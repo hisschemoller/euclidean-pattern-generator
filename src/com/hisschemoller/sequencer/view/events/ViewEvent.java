@@ -29,9 +29,6 @@ public class ViewEvent extends AWTEvent
 	public static final int PLAYBACK_CHANGE = 2;
 	public static final int MIDI_IN_DEVICE_SELECT = 3;
 	public static final int MIDI_OUT_DEVICE_SELECT = 4;
-	public static final int MIDI_CHECKBOX_SELECT = 5;
-	public static final int OSC_CHECKBOX_SELECT = 6;
-	public static final int ALL_NOTES_OFF = 7;
 
 	/** Pattern editor */
 	public static final int PANEL_CLICK = 10;
@@ -44,8 +41,6 @@ public class ViewEvent extends AWTEvent
 	public static final int DELETE_PATTERN = 22;
 	public static final int MUTE_PATTERN = 23;
 	public static final int SOLO_PATTERN = 24;
-	public static final int QUANTIZATION = 25;
-	public static final int NAME_CHANGE = 26;
 
 	public static final long serialVersionUID = -1L;
 

@@ -34,7 +34,6 @@ import org.puremvc.java.multicore.patterns.command.SimpleCommand;
 import com.hisschemoller.sequencer.model.SequencerProxy;
 import com.hisschemoller.sequencer.model.vo.PatternVO;
 import com.hisschemoller.sequencer.notification.SeqNotifications;
-import com.hisschemoller.sequencer.util.SequencerEnums.Quantization;
 
 public class CreatePatternCommand extends SimpleCommand
 {
@@ -51,7 +50,7 @@ public class CreatePatternCommand extends SimpleCommand
 		}
 
 		SequencerProxy sequencerProxy = ( SequencerProxy ) getFacade ( ).retrieveProxy ( SequencerProxy.NAME );
-		Vector < PatternVO > patterns = sequencerProxy.getPatterns ( );
+		Vector<PatternVO> patterns = sequencerProxy.getPatterns ( );
 
 		/** Check for solo. */
 		boolean mutedBySolo = false;
@@ -64,19 +63,18 @@ public class CreatePatternCommand extends SimpleCommand
 				break;
 			}
 		}
-		
+
 		PatternVO patternVO = new PatternVO ( );
 		patternVO.id = UUID.randomUUID ( );
 		patternVO.steps = 16;
 		patternVO.fills = 4;
 		patternVO.rotation = 0;
-		patternVO.quantization = Quantization.Q16.getValue ( );
-		patternVO.stepLength = ( sequencerProxy.getPulsesPerQuarterNote ( ) * 4 ) / patternVO.quantization;
-		patternVO.patternLength = patternVO.steps * patternVO.stepLength;
-		patternVO.position = sequencerProxy.getPulsesSinceStart ( ) % patternVO.patternLength;
+		patternVO.quantization = sequencerProxy.getPulsesPerQuarterNote ( ) / 4;
+		patternVO.length = patternVO.steps * patternVO.quantization;
+		patternVO.position = sequencerProxy.getPulsesSinceStart ( ) % patternVO.length;
 		patternVO.midiChannel = 0;
 		patternVO.midiPitch = 60;
-		patternVO.midiVelocity = 10;
+		patternVO.midiVelocity = 100;
 		patternVO.noteLength = sequencerProxy.getPulsesPerQuarterNote ( ) / 4;
 		patternVO.mutedBySolo = mutedBySolo;
 		patternVO.viewX = point.x;
@@ -88,8 +86,8 @@ public class CreatePatternCommand extends SimpleCommand
 			try
 			{
 				ShortMessage message = new ShortMessage ( );
-				message.setMessage ( ShortMessage.NOTE_ON, patternVO.midiChannel, patternVO.midiPitch, patternVO.midiVelocity );
-				MidiEvent midiEvent = new MidiEvent ( message, i * 4 * patternVO.stepLength );
+				message.setMessage ( ShortMessage.NOTE_ON, 0, 60, 100 );
+				MidiEvent midiEvent = new MidiEvent ( message, i * 4 * patternVO.quantization );
 
 				patternVO.events.add ( midiEvent );
 			}
@@ -101,7 +99,7 @@ public class CreatePatternCommand extends SimpleCommand
 
 		/** Add pattern to list. */
 		patterns.add ( patternVO );
-
+		
 		/** Create position notes array of new length. */
 		sendNotification ( SeqNotifications.UPDATE_POSITION_NOTES );
 

@@ -20,49 +20,22 @@
 
 package com.hisschemoller.sequencer;
 
-import java.awt.Container;
-
 import javax.swing.SwingUtilities;
 
-import com.hisschemoller.sequencer.util.EPGSwingEngine;
-import com.hisschemoller.sequencer.view.components.MainFrame;
-
 /**
- * Program argument: -Dcom.apple.macos.useScreenMenuBar = true
+ * Program argument:
+ * -Dcom.apple.macos.useScreenMenuBar = true
  */
 
 public class SequencerMain
 {
-	private SequencerFacade _facade = SequencerFacade.getInstance ( );
-
-	public SequencerMain ( )
-	{
-		try
-		{
-			/** Layout with SwiXML. */
-			EPGSwingEngine swingEngine = new EPGSwingEngine ( this );
-			Container container = swingEngine.render ( "res/layout/main.xml" );
-			container.setVisible ( true );
-			
-			/** Frame created here; doesn't need MVC yet. */
-			new MainFrame ( swingEngine );
-
-			/** Start PureMVC. */
-			_facade.startup ( swingEngine );
-		}
-		catch ( Exception exception )
-		{
-			exception.printStackTrace ( );
-		}
-	}
-
 	public static void main ( String [ ] args )
 	{
 		SwingUtilities.invokeLater ( new Runnable ( )
 		{
 			public void run ( )
 			{
-				new SequencerMain ( );
+				new SequencerFrame ( );
 			}
 		} );
 	}

@@ -32,19 +32,14 @@ import com.hisschemoller.sequencer.controller.UpdateTempoCommand;
 import com.hisschemoller.sequencer.controller.file.NewProjectCommand;
 import com.hisschemoller.sequencer.controller.file.OpenProjectCommand;
 import com.hisschemoller.sequencer.controller.file.SaveProjectCommand;
-import com.hisschemoller.sequencer.controller.midi.EnableMidiOutCommand;
 import com.hisschemoller.sequencer.controller.midi.OpenMidiDeviceCommand;
-import com.hisschemoller.sequencer.controller.midi.SendMidiAllNotesOffCommand;
 import com.hisschemoller.sequencer.controller.midi.SendMidiMessageCommand;
 import com.hisschemoller.sequencer.controller.midi.UpdateMidiDevicesCommand;
-import com.hisschemoller.sequencer.controller.osc.EnableOscCommand;
 import com.hisschemoller.sequencer.controller.pattern.CreatePatternCommand;
 import com.hisschemoller.sequencer.controller.pattern.DeletePatternCommand;
 import com.hisschemoller.sequencer.controller.pattern.UpdateMidiSettingsCommand;
 import com.hisschemoller.sequencer.controller.pattern.UpdateOtherSettingsCommand;
 import com.hisschemoller.sequencer.controller.pattern.UpdatePatternLocationCommand;
-import com.hisschemoller.sequencer.controller.pattern.UpdatePatternNameCommand;
-import com.hisschemoller.sequencer.controller.pattern.UpdatePatternQuantizationCommand;
 import com.hisschemoller.sequencer.controller.pattern.UpdatePatternSettingsCommand;
 
 public class SeqNotifications
@@ -72,39 +67,23 @@ public class SeqNotifications
 
 	public static final String SELECT_PATTERN = "SeqNotifications.SELECT_PATTERN";
 
-	public static final String UPDATE_PATTERN_QUANTIZATION = "SeqNotifications.UPDATE_PATTERN_QUANTIZATION";
-	public static final String PATTERN_QUANTIZATION_UPDATED = "SeqNotifications.PATTERN_QUANTIZATION_UPDATED";
-
 	public static final String UPDATE_MIDI_SETTINGS = "SeqNotifications.UPDATE_MIDI_SETTINGS";
 	public static final String MIDI_SETTINGS_UPDATED = "SeqNotifications.MIDI_SETTINGS_UPDATED";
 
 	public static final String UPDATE_PATTERN_SETTINGS = "SeqNotifications.UPDATE_PATTERN_SETTINGS";
 	public static final String PATTERN_SETTINGS_UPDATED = "SeqNotifications.PATTERN_SETTINGS_UPDATED";
 
-	public static final String UPDATE_PATTERN_NAME = "SeqNotifications.UPDATE_PATTERN_NAME";
-	public static final String PATTERN_NAME_UPDATED = "SeqNotifications.PATTERN_NAME_UPDATED";
-
 	public static final String OPEN_PATTERN_SETTINGS = "SeqNotifications.OPEN_PATTERN_SETTINGS";
 	public static final String PATTERN_SETTINGS_OPENED = "SeqNotifications.PATTERN_SETTINGS_OPENED";
+	public static final String ADD_PATTERN_SETTINGS = "SeqNotifications.ADD_PATTERN_SETTINGS";
 
 	public static final String UPDATE_MIDI_DEVICES = "SeqNotifications.UPDATE_MIDI_DEVICES";
 	public static final String MIDI_DEVICES_UPDATED = "SeqNotifications.MIDI_DEVICES_UPDATED";
 
 	public static final String OPEN_MIDI_IN_DEVICE = "SeqNotifications.OPEN_MIDI_IN_DEVICE";
-	public static final String MIDI_IN_DEVICE_OPENED = "SeqNotifications.MIDI_IN_DEVICE_OPENED";
-	
 	public static final String OPEN_MIDI_OUT_DEVICE = "SeqNotifications.OPEN_MIDI_OUT_DEVICE";
-	public static final String MIDI_OUT_DEVICE_OPENED = "SeqNotifications.MIDI_OUT_DEVICE_OPENED";
 
 	public static final String SEND_MIDI_MESSAGE = "SeqNotifications.SEND_MIDI_MESSAGE";
-
-	public static final String SEND_MIDI_ALL_NOTES_OFF = "SeqNotifications.SEND_MIDI_ALL_NOTES_OFF";
-	
-	public static final String ENABLE_MIDI_OUT_DEVICE = "SeqNotifications.ENABLE_MIDI_OUT_DEVICE";
-	public static final String MIDI_OUT_DEVICE_ENABLED = "SeqNotifications.MIDI_OUT_DEVICE_ENABLED";
-	
-	public static final String ENABLE_OSC_DEVICE = "SeqNotifications.ENABLE_OSC_DEVICE";
-	public static final String OSC_DEVICE_ENABLED = "SeqNotifications.OSC_DEVICE_ENABLED";
 
 	public static final String OPEN_PROJECT = "SeqNotifications.OPEN_PROJECT";
 	public static final String PROJECT_OPENED = "SeqNotifications.PROJECT_OPENED";
@@ -136,18 +115,13 @@ public class SeqNotifications
 		facade.registerCommand ( OPEN_MIDI_IN_DEVICE, new OpenMidiDeviceCommand ( ) );
 		facade.registerCommand ( OPEN_MIDI_OUT_DEVICE, new OpenMidiDeviceCommand ( ) );
 		facade.registerCommand ( SEND_MIDI_MESSAGE, new SendMidiMessageCommand ( ) );
-		facade.registerCommand ( SEND_MIDI_ALL_NOTES_OFF, new SendMidiAllNotesOffCommand ( ) );
 		facade.registerCommand ( UPDATE_MIDI_SETTINGS, new UpdateMidiSettingsCommand ( ) );
-		facade.registerCommand ( ENABLE_MIDI_OUT_DEVICE, new EnableMidiOutCommand ( ) );
-		facade.registerCommand ( ENABLE_OSC_DEVICE, new EnableOscCommand ( ) );
 		facade.registerCommand ( UPDATE_PATTERN_SETTINGS, new UpdatePatternSettingsCommand ( ) );
-		facade.registerCommand ( UPDATE_PATTERN_NAME, new UpdatePatternNameCommand ( ) );
 		facade.registerCommand ( UPDATE_PATTERN_LOCATION, new UpdatePatternLocationCommand ( ) );
 		facade.registerCommand ( CREATE_PATTERN, new CreatePatternCommand ( ) );
 		facade.registerCommand ( DELETE_PATTERN, new DeletePatternCommand ( ) );
 		facade.registerCommand ( MUTE_PATTERN, new UpdateOtherSettingsCommand ( ) );
 		facade.registerCommand ( SOLO_PATTERN, new UpdateOtherSettingsCommand ( ) );
-		facade.registerCommand ( UPDATE_PATTERN_QUANTIZATION, new UpdatePatternQuantizationCommand ( ) );
 		facade.registerCommand ( UPDATE_TEMPO, new UpdateTempoCommand ( ) );
 		facade.registerCommand ( UPDATE_RESOLUTION, new UpdateResolutionCommand ( ) );
 		facade.registerCommand ( CHANGE_PLAYBACK, new ChangePlaybackCommand ( ) );

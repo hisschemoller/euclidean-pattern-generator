@@ -20,33 +20,36 @@
 
 package com.hisschemoller.sequencer.view.components;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.LayoutManager;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Enumeration;
 import java.util.UUID;
 import java.util.Vector;
 
-import javax.swing.AbstractButton;
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
-import javax.swing.JRadioButton;
+import javax.swing.JPanel;
 import javax.swing.JSlider;
-import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import com.hisschemoller.sequencer.model.vo.PatternVO;
 import com.hisschemoller.sequencer.model.vo.SettingsVO;
-import com.hisschemoller.sequencer.util.EPGSwingEngine;
-import com.hisschemoller.sequencer.util.SequencerEnums.Quantization;
 import com.hisschemoller.sequencer.view.events.IViewEventListener;
 import com.hisschemoller.sequencer.view.events.ViewEvent;
 
-public class PatternSettings implements ActionListener, ChangeListener
+public class PatternSettings extends JPanel implements ActionListener, ChangeListener
 {
 	public static final long serialVersionUID = -1L;
 	private UUID _patternID;
@@ -67,95 +70,19 @@ public class PatternSettings implements ActionListener, ChangeListener
 	private JCheckBox _muteCheckBox;
 	private JCheckBox _soloCheckBox;
 	private JButton _deleteButton;
-	private ButtonGroup _stepTimeButtonGroup;
-	private JTextField _nameTextField;
-	private Vector < IViewEventListener > _viewEventListeners = new Vector < IViewEventListener > ( );
+	private Vector<IViewEventListener> _viewEventListeners = new Vector<IViewEventListener> ( );
 	private Boolean _isUpdating = false;
 	private Boolean _isEnabled = true;
 
-	public PatternSettings ( EPGSwingEngine swingEngine )
+	public PatternSettings ( )
 	{
-		_stepsSlider = ( JSlider ) swingEngine.find ( "SETTINGS_EUCLID_LENGTH_SLIDER" );
-		_stepsSlider.addChangeListener ( this );
-		_stepsLabel = ( JLabel ) swingEngine.find ( "SETTINGS_EUCLID_LENGTH_TEXT" );
+		this ( new GridBagLayout ( ) );
+	}
 
-		_fillsSlider = ( JSlider ) swingEngine.find ( "SETTINGS_EUCLID_NOTES_SLIDER" );
-		_fillsSlider.addChangeListener ( this );
-		_fillsLabel = ( JLabel ) swingEngine.find ( "SETTINGS_EUCLID_NOTES_TEXT" );
-
-		_rotationSlider = ( JSlider ) swingEngine.find ( "SETTINGS_EUCLID_ROTATE_SLIDER" );
-		_rotationSlider.addChangeListener ( this );
-		_rotationLabel = ( JLabel ) swingEngine.find ( "SETTINGS_EUCLID_ROTATE_TEXT" );
-
-		_channelSlider = ( JSlider ) swingEngine.find ( "SETTINGS_MIDI_CHANNEL_SLIDER" );
-		_channelSlider.addChangeListener ( this );
-		_channelLabel = ( JLabel ) swingEngine.find ( "SETTINGS_MIDI_CHANNEL_TEXT" );
-
-		_pitchSlider = ( JSlider ) swingEngine.find ( "SETTINGS_MIDI_PITCH_SLIDER" );
-		_pitchSlider.addChangeListener ( this );
-		_pitchLabel = ( JLabel ) swingEngine.find ( "SETTINGS_MIDI_PITCH_TEXT" );
-
-		_velocitySlider = ( JSlider ) swingEngine.find ( "SETTINGS_MIDI_VELOCITY_SLIDER" );
-		_velocitySlider.addChangeListener ( this );
-		_velocityLabel = ( JLabel ) swingEngine.find ( "SETTINGS_MIDI_VELOCITY_TEXT" );
-
-		_lengthSlider = ( JSlider ) swingEngine.find ( "SETTINGS_NOTE_LENGTH_SLIDER" );
-		_lengthSlider.addChangeListener ( this );
-		_lengthLabel = ( JLabel ) swingEngine.find ( "SETTINGS_NOTE_LENGTH_TEXT" );
-
-		_nameTextField = ( JTextField ) swingEngine.find ( "SETTINGS_PATTERN_NAME" );
-		_nameTextField.getDocument ( ).addDocumentListener ( new DocumentListener ( )
-		{
-			public void removeUpdate ( DocumentEvent event )
-			{
-				PatternSettings.this.dispatchViewEvent ( _nameTextField, ViewEvent.NAME_CHANGE );
-			}
-
-			public void insertUpdate ( DocumentEvent event )
-			{
-				PatternSettings.this.dispatchViewEvent ( _nameTextField, ViewEvent.NAME_CHANGE );
-			}
-
-			public void changedUpdate ( DocumentEvent event )
-			{
-			}
-		} );
-
-		_muteCheckBox = ( JCheckBox ) swingEngine.find ( "SETTINGS_MUTE_CHECKBOX" );
-		_muteCheckBox.addActionListener ( this );
-
-		_soloCheckBox = ( JCheckBox ) swingEngine.find ( "SETTINGS_SOLO_CHECKBOX" );
-		_soloCheckBox.addActionListener ( this );
-
-		_deleteButton = ( JButton ) swingEngine.find ( "SETTINGS_DELETE_BUTTON" );
-		_deleteButton.addActionListener ( this );
-
-		_stepTimeButtonGroup = new ButtonGroup ( );
-
-		JRadioButton radioButton = ( JRadioButton ) swingEngine.find ( "SETTINGS_STEP_LENGTH_1" );
-		radioButton.setActionCommand ( Quantization.Q1.name ( ) );
-		radioButton.addActionListener ( this );
-		_stepTimeButtonGroup.add ( radioButton );
-		radioButton = ( JRadioButton ) swingEngine.find ( "SETTINGS_STEP_LENGTH_1_2" );
-		radioButton.setActionCommand ( Quantization.Q2.name ( ) );
-		_stepTimeButtonGroup.add ( radioButton );
-		radioButton.addActionListener ( this );
-		radioButton = ( JRadioButton ) swingEngine.find ( "SETTINGS_STEP_LENGTH_1_4" );
-		radioButton.setActionCommand ( Quantization.Q4.name ( ) );
-		radioButton.addActionListener ( this );
-		_stepTimeButtonGroup.add ( radioButton );
-		radioButton = ( JRadioButton ) swingEngine.find ( "SETTINGS_STEP_LENGTH_1_8" );
-		radioButton.setActionCommand ( Quantization.Q8.name ( ) );
-		radioButton.addActionListener ( this );
-		_stepTimeButtonGroup.add ( radioButton );
-		radioButton = ( JRadioButton ) swingEngine.find ( "SETTINGS_STEP_LENGTH_1_16" );
-		radioButton.setActionCommand ( Quantization.Q16.name ( ) );
-		radioButton.addActionListener ( this );
-		_stepTimeButtonGroup.add ( radioButton );
-		radioButton = ( JRadioButton ) swingEngine.find ( "SETTINGS_STEP_LENGTH_1_32" );
-		radioButton.setActionCommand ( Quantization.Q32.name ( ) );
-		radioButton.addActionListener ( this );
-		_stepTimeButtonGroup.add ( radioButton );
+	public PatternSettings ( LayoutManager layoutManager )
+	{
+		super ( layoutManager );
+		setup ( );
 	}
 
 	public void updatePattern ( PatternVO patternVO )
@@ -177,14 +104,6 @@ public class PatternSettings implements ActionListener, ChangeListener
 	}
 
 	public void updateSettings ( PatternVO patternVO )
-	{
-		if ( patternVO.id == _patternID )
-		{
-			setValues ( patternVO );
-		}
-	}
-
-	public void updateQuantization ( PatternVO patternVO )
 	{
 		if ( patternVO.id == _patternID )
 		{
@@ -232,22 +151,28 @@ public class PatternSettings implements ActionListener, ChangeListener
 		_muteCheckBox.setEnabled ( !patternVO.mutedBySolo && !patternVO.solo );
 		_muteCheckBox.setSelected ( patternVO.mute );
 		_soloCheckBox.setSelected ( patternVO.solo );
-		_nameTextField.setText ( patternVO.name );
-
-		Enumeration < AbstractButton > radioButtons = _stepTimeButtonGroup.getElements ( );
-		while ( radioButtons.hasMoreElements ( ) )
-		{
-			JRadioButton radioButton = ( JRadioButton ) radioButtons.nextElement ( );
-			String quantizationName = radioButton.getActionCommand ( );
-			Quantization quantization = Enum.valueOf ( Quantization.class, quantizationName );
-
-			if ( patternVO.quantization == quantization.getValue ( ) )
-			{
-				_stepTimeButtonGroup.setSelected ( radioButton.getModel ( ), true );
-			}
-		}
 
 		_isUpdating = false;
+	}
+
+	public void paintComponent ( Graphics graphics )
+	{
+		super.paintComponent ( graphics );
+
+		Graphics2D graphics2 = ( Graphics2D ) graphics;
+		graphics2.setRenderingHint ( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
+
+		int padding = 2;
+		int paddingDouble = padding * 2;
+		int radius = 8;
+		Color color = new Color ( 0xEEEEEE );
+		graphics2.setColor ( new Color ( color.getRed ( ), color.getGreen ( ), color.getBlue ( ), 255 ) );
+		graphics2.fillRoundRect ( padding, padding, getWidth ( ) - paddingDouble, getHeight ( ) - paddingDouble, radius, radius );
+
+		color = new Color ( 0x999999 );
+		graphics2.setStroke ( new BasicStroke ( 4 ) );
+		graphics2.setColor ( new Color ( color.getRed ( ), color.getGreen ( ), color.getBlue ( ), 255 ) );
+		graphics2.drawRoundRect ( padding, padding, getWidth ( ) - paddingDouble, getHeight ( ) - paddingDouble, radius, radius );
 	}
 
 	public void actionPerformed ( ActionEvent event )
@@ -264,14 +189,15 @@ public class PatternSettings implements ActionListener, ChangeListener
 		{
 			dispatchViewEvent ( _deleteButton, ViewEvent.SOLO_PATTERN );
 		}
-		else if ( event.getSource ( ).getClass ( ) == JRadioButton.class )
-		{
-			dispatchViewEvent ( _stepTimeButtonGroup, ViewEvent.QUANTIZATION );
-		}
 	}
 
 	public void stateChanged ( ChangeEvent event )
 	{
+		if ( _isUpdating )
+		{
+			return;
+		}
+
 		if ( event.getSource ( ) == _stepsSlider )
 		{
 			dispatchViewEvent ( _stepsSlider, ViewEvent.PATTERN_SETTINGS_CHANGE );
@@ -315,11 +241,6 @@ public class PatternSettings implements ActionListener, ChangeListener
 		settingsVO.rotation = _rotationSlider.getValue ( );
 		settingsVO.mute = _muteCheckBox.isSelected ( );
 		settingsVO.solo = _soloCheckBox.isSelected ( );
-		settingsVO.name = _nameTextField.getText ( );
-
-		String quantizationName = _stepTimeButtonGroup.getSelection ( ).getActionCommand ( );
-		Quantization quantization = Enum.valueOf ( Quantization.class, quantizationName );
-		settingsVO.quantization = quantization.getValue ( );
 
 		return settingsVO;
 	}
@@ -333,17 +254,12 @@ public class PatternSettings implements ActionListener, ChangeListener
 	{
 		_viewEventListeners.removeElement ( listener );
 	}
-
+	
 	/**
 	 * Dispatch custom ViewEvent.
 	 */
 	protected void dispatchViewEvent ( Object source, int id )
 	{
-		if ( _isUpdating )
-		{
-			return;
-		}
-		
 		ViewEvent viewEvent = new ViewEvent ( source, id );
 		for ( int i = 0; i < _viewEventListeners.size ( ); i++ )
 		{
@@ -351,27 +267,123 @@ public class PatternSettings implements ActionListener, ChangeListener
 		}
 	}
 
+	protected void setup ( )
+	{
+		setOpaque ( false );
+
+		GridBagConstraints constraints = new GridBagConstraints ( );
+
+		JLabel label = new JLabel ( "Pattern Settings" );
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		constraints.gridwidth = 3;
+		constraints.insets = new Insets ( 15, 0, 5, 0 );
+		constraints.anchor = GridBagConstraints.LINE_START;
+		add ( label, constraints );
+
+		createLabel ( 1, 0, "Steps", false );
+		_stepsSlider = createSlider ( 1, 1, 16, 1 );
+		_stepsLabel = createLabel ( 1, 2, "", true );
+
+		createLabel ( 2, 0, "Fills", false );
+		_fillsSlider = createSlider ( 2, 1, 16, 1 );
+		_fillsLabel = createLabel ( 2, 2, "", true );
+
+		createLabel ( 3, 0, "Rotate", false );
+		_rotationSlider = createSlider ( 3, 0, 15, 0 );
+		_rotationLabel = createLabel ( 3, 2, "", true );
+
+		label = new JLabel ( "MIDI Settings" );
+		constraints.gridx = 0;
+		constraints.gridy = 5;
+		constraints.gridwidth = 3;
+		add ( label, constraints );
+
+		createLabel ( 6, 0, "Channel", false );
+		_channelSlider = createSlider ( 6, 1, 16, 1 );
+		_channelLabel = createLabel ( 6, 2, "", true );
+
+		createLabel ( 7, 0, "Pitch", false );
+		_pitchSlider = createSlider ( 7, 0, 127, 0 );
+		_pitchLabel = createLabel ( 7, 2, "", true );
+
+		createLabel ( 8, 0, "Velocity", false );
+		_velocitySlider = createSlider ( 8, 0, 127, 0 );
+		_velocityLabel = createLabel ( 8, 2, "", true );
+
+		createLabel ( 9, 0, "Length", false );
+		_lengthSlider = createSlider ( 9, 1, 1, 1 );
+		_lengthLabel = createLabel ( 9, 2, "", true );
+
+		label = new JLabel ( "Other Settings" );
+		constraints.gridx = 0;
+		constraints.gridy = 10;
+		constraints.gridwidth = 3;
+		add ( label, constraints );
+
+		createLabel ( 11, 0, "Mute", false );
+		_muteCheckBox = new JCheckBox ( );
+		_muteCheckBox.addActionListener ( this );
+		constraints.gridx = 1;
+		constraints.gridy = 11;
+		constraints.gridwidth = 1;
+		constraints.insets = new Insets ( 0, 0, 0, 0 );
+		add ( _muteCheckBox, constraints );
+
+		createLabel ( 12, 0, "Solo", false );
+		_soloCheckBox = new JCheckBox ( );
+		_soloCheckBox.addActionListener ( this );
+		constraints.gridx = 1;
+		constraints.gridy = 12;
+		add ( _soloCheckBox, constraints );
+
+		createLabel ( 13, 0, "Delete", false );
+		_deleteButton = new JButton ( "Delete pattern" );
+		_deleteButton.addActionListener ( this );
+		constraints.gridx = 1;
+		constraints.gridy = 13;
+		constraints.gridwidth = 1;
+		add ( _deleteButton, constraints );
+	}
+
+	private JSlider createSlider ( int gridRow, int min, int max, int value )
+	{
+		GridBagConstraints constraints = new GridBagConstraints ( );
+		constraints.gridx = 1;
+		constraints.gridy = gridRow;
+		JSlider slider = new JSlider ( SwingConstants.HORIZONTAL, min, max, value );
+		slider.addChangeListener ( this );
+		slider.setPreferredSize ( new Dimension ( 128, 20 ) );
+		add ( slider, constraints );
+		return slider;
+	}
+
+	private JLabel createLabel ( int gridRow, int gridCol, String text, Boolean isValueLabel )
+	{
+		GridBagConstraints constraints = new GridBagConstraints ( );
+		constraints.anchor = GridBagConstraints.LINE_START;
+		constraints.gridx = gridCol;
+		constraints.gridy = gridRow;
+		JLabel label = new JLabel ( text, SwingConstants.RIGHT );
+
+		if ( isValueLabel )
+		{
+			label.setPreferredSize ( new Dimension ( 40, 20 ) );
+		}
+
+		add ( label, constraints );
+		return label;
+	}
+
 	private void setSettingsEnabled ( boolean enabled )
 	{
 		if ( enabled != _isEnabled )
 		{
 			_isEnabled = enabled;
-			_stepsSlider.setEnabled ( _isEnabled );
-			_fillsSlider.setEnabled ( _isEnabled );
-			_rotationSlider.setEnabled ( _isEnabled );
-			_channelSlider.setEnabled ( _isEnabled );
-			_velocitySlider.setEnabled ( _isEnabled );
-			_pitchSlider.setEnabled ( _isEnabled );
-			_lengthSlider.setEnabled ( _isEnabled );
-			_muteCheckBox.setEnabled ( _isEnabled );
-			_soloCheckBox.setEnabled ( _isEnabled );
-			_deleteButton.setEnabled ( _isEnabled );
-			_nameTextField.setEnabled ( _isEnabled );
-
-			Enumeration < AbstractButton > radioButtons = _stepTimeButtonGroup.getElements ( );
-			while ( radioButtons.hasMoreElements ( ) )
+			int n = getComponentCount ( );
+			while ( --n > -1 )
 			{
-				radioButtons.nextElement ( ).setEnabled ( _isEnabled );
+				getComponent ( n ).setEnabled ( _isEnabled );
 			}
 		}
 	}

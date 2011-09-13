@@ -34,6 +34,4 @@ public class SettingsVO
 	public int noteLength;
 	public boolean mute;
 	public boolean solo;
-	public String name;
-	public int quantization;
 }

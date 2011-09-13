@@ -32,6 +32,9 @@ import com.hisschemoller.sequencer.notification.SeqNotifications;
 
 public class UpdateOtherSettingsCommand extends SimpleCommand
 {
+	/**
+	 * 
+	 */
 	@Override public final void execute ( final INotification notification )
 	{
 		SettingsVO settingsVO = ( SettingsVO ) notification.getBody ( );
