@@ -32,7 +32,8 @@ public class PatternVO
 
 	/** quantization, length and position in PPQN. */
 	public int quantization;
-	public int length;
+	public int stepLength;
+	public int patternLength;
 	public int position;
 
 	/** Pattern settings */
@@ -53,6 +54,7 @@ public class PatternVO
 	public boolean mute = false;
 	public boolean solo = false;
 	public boolean mutedBySolo = false;
+	public String name = "";
 
 	/** Location. */
 	public int viewX;
@@ -61,8 +63,8 @@ public class PatternVO
 	public String toString ( )
 	{
 		String returnStr = "steps: " + steps + ", fills: " + fills + ", rot: " + rotation;
-		returnStr += ", x: " + viewX + ", y: " + viewY;
-		returnStr += ", quant: " + quantization + ", length: " + length + ", position: " + position;
+		returnStr += ", x: " + viewX + ", y: " + viewY + ", name: " + name;
+		returnStr += ", quant: " + quantization + ", stepLength: " + stepLength + ", patternLength: " + patternLength + ", position: " + position;
 		return returnStr;
 	}
 }

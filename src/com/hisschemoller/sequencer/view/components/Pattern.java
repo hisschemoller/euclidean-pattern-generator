@@ -20,6 +20,7 @@
 
 package com.hisschemoller.sequencer.view.components;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.LayoutManager;
 import java.util.UUID;
@@ -42,13 +43,11 @@ public class Pattern extends JPanel implements Runnable
 	private float _tweenPosition = 0;
 	private float _tweenDuration = 1;
 	private float _tweenIncrease = 0.1f;
-	private float _rotationPerMsNormalized;
 	private float _position;
-	private long _positionTime = System.currentTimeMillis ( );
 
 	public enum Operation
 	{
-		CHANGE, MUTE, SOLO, LOCATION;
+		CHANGE, MUTE, SOLO, LOCATION, NAME;
 	}
 
 	public Pattern ( PatternVO patternVO, Boolean isAnimated )
@@ -84,7 +83,7 @@ public class Pattern extends JPanel implements Runnable
 				while ( --m > -1 )
 				{
 					MidiEvent midiEvent = patternVO.events.get ( m );
-					if ( midiEvent.getTick ( ) / patternVO.quantization == stepIndexRotationCorrected )
+					if ( midiEvent.getTick ( ) / patternVO.stepLength == stepIndexRotationCorrected )
 					{
 						selected = true;
 						break;
@@ -128,6 +127,10 @@ public class Pattern extends JPanel implements Runnable
 				setLocation ( patternVO.viewX, patternVO.viewY );
 			}
 			break;
+
+		case NAME:
+			_painter.setName ( patternVO.name );
+			break;
 		}
 	}
 
@@ -137,26 +140,7 @@ public class Pattern extends JPanel implements Runnable
 	 */
 	public void updatePosition ( float position )
 	{
-		_positionTime = System.currentTimeMillis ( );
 		_position = position;
-	}
-
-	/**
-	 * Each time the playback speed changes this value is updated.
-	 * _rotationPerMsNormalized = rotation normalized (0 to 1) per millisecond.
-	 */
-	public void updateTempo ( float bpm )
-	{
-		if ( bpm == 0f )
-		{
-			_rotationPerMsNormalized = 0;
-			return;
-		}
-
-		float milliSecondsPerBeat = 60000f / bpm;
-		float beatsPerRotation = _numSteps / 4f;
-		float milliSecondsPerRotation = beatsPerRotation * milliSecondsPerBeat;
-		_rotationPerMsNormalized = 1f / milliSecondsPerRotation;
 	}
 
 	/**
@@ -165,10 +149,7 @@ public class Pattern extends JPanel implements Runnable
 	 */
 	public void updateDraw ( )
 	{
-		long now = System.currentTimeMillis ( );
-		float rotationSinceLastPositionUpdate = ( now - _positionTime ) * _rotationPerMsNormalized;
-		float positionNow = _position + rotationSinceLastPositionUpdate;
-		_painter.setPointerRotation ( ( float ) Math.PI + ( DOUBLE_PI * positionNow ) );
+		_painter.setPointerRotation ( ( float ) Math.PI + ( DOUBLE_PI * _position ) );
 	}
 
 	/**
@@ -203,7 +184,7 @@ public class Pattern extends JPanel implements Runnable
 			try
 			{
 				_tweenPosition += _tweenIncrease;
-				_painter.updateStartAnimation ( _tweenPosition );
+				_painter.updateStartupAnimation ( _tweenPosition );
 				if ( _tweenPosition >= _tweenDuration )
 				{
 					break;
@@ -232,13 +213,15 @@ public class Pattern extends JPanel implements Runnable
 		setOpaque ( false );
 		// setBackground ( new Color ( 0xFFEEEEEE ) );
 		setSize ( PANEL_SIZE, PANEL_SIZE );
+		setPreferredSize ( new Dimension ( PANEL_SIZE, PANEL_SIZE ) );
 
 		updatePattern ( patternVO, Operation.CHANGE );
 		updatePattern ( patternVO, Operation.LOCATION );
 		updatePattern ( patternVO, Operation.MUTE );
 		updatePattern ( patternVO, Operation.SOLO );
-		
-		if( isAnimated )
+		updatePattern ( patternVO, Operation.NAME );
+
+		if ( isAnimated )
 		{
 			new Thread ( this ).start ( );
 		}

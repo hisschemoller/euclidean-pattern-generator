@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doc>
+	<panel
+	 	id="panel">
+	 		
+	 	<togglebutton 
+	 		id="PLAY_BUTTON"
+	 		text="Play">
+			<gridbagconstraints
+				gridx="0"
+				gridy="0"
+				insets="6,10,0,0"
+				fill="GridBagConstraints.HORIZONTAL"
+				/>
+	 	</togglebutton>
+	 		
+	 	<button
+	 		id="ALL_NOTES_OFF_BUTTON"
+	 		text="All Notes Off">
+			<gridbagconstraints
+				gridx="0"
+				gridy="1"
+				insets="0,10,0,0"
+				fill="GridBagConstraints.HORIZONTAL"
+				/>
+	 	</button>
+	 	
+	 	<panel
+	 		opaque="false">
+			<gridbagconstraints
+				gridx="0"
+				gridy="2"
+				weighty="1"
+				/>
+	 	</panel>
+	 		
+	 	<slider 
+	 		id="TEMPO_SLIDER"
+	 		minimum="300"
+	 		maximum="3000"
+	 		value="1200"
+	 		orientation="SwingConstants.HORIZONTAL">
+			<gridbagconstraints
+				gridx="1"
+				gridy="0"
+				gridwidth="2"
+				insets="6,0,0,0"
+				/>
+	 	</slider>
+	 	
+	 	<label
+	 		text="Tempo in BPM">
+			<gridbagconstraints
+				gridx="1"
+				gridy="1"
+				insets="0,10,0,0"
+				anchor="GridBagConstraints.LINE_START"
+				/>
+	 	</label>
+	 		
+	 	<formattedtextfield 
+	 		id="TEMPO_INPUT"
+	 		text="120.0"
+	 		horizontalalignment="JTextField.RIGHT">
+			<gridbagconstraints
+				gridx="2"
+				gridy="1"
+				insets="0,0,0,10"
+				anchor="GridBagConstraints.LINE_END"
+				/>
+	 	</formattedtextfield>
+	 	
+	 	<!-- separator
+	 		preferredsize="20,20"
+	 		background="000000"
+	 		foreground="FFFFFF"
+	 		orientation="SwingConstants.VERTICAL">
+			<gridbagconstraints
+				gridx="3"
+				gridy="0"
+				gridheight="2"
+				fill="GridBagConstraints.VERTICAL"
+				/>
+	 	</separator -->
+	 	
+	 	<checkbox
+	 		id="OSC_CHECKBOX"
+	 		text="Send OSC"
+	 		selected="true">
+			<gridbagconstraints
+				gridx="4"
+				gridy="0"
+				anchor="GridBagConstraints.LINE_START"
+				/>
+	 	</checkbox>
+	 	
+	 	<checkbox
+	 		id="MIDI_CHECKBOX"
+	 		text="Send MIDI"
+	 		selected="true">
+			<gridbagconstraints
+				gridx="4"
+				gridy="1"
+				anchor="GridBagConstraints.LINE_START"
+				/>
+	 	</checkbox>
+	 	
+	 	<label
+	 		text="OSC Port">
+			<gridbagconstraints
+				gridx="5"
+				gridy="0"
+				insets="0,20,0,0"
+				anchor="GridBagConstraints.LINE_END"
+				/>
+	 	</label>
+	 	
+	 	<label
+	 		text="MIDI Out Port">
+			<gridbagconstraints
+				gridx="5"
+				gridy="1"
+				insets="0,20,0,0"
+				anchor="GridBagConstraints.LINE_END"
+				/>
+	 	</label>
+	 		
+	 	<textfield
+	 		id="OSC_TEXTFIELD"
+	 		text="9000"
+	 		preferredsize="180,24"
+	 		minimumsize="180,24"
+	 		tooltiptext="Enter an OSC port number on which to send."
+	 		horizontalalignment="JTextField.RIGHT">
+			<gridbagconstraints
+				gridx="6"
+				gridy="0"
+				insets="0,10,0,0"
+				anchor="GridBagConstraints.LINE_START"
+				/>
+	 	</textfield>
+	 	
+	 	<combobox
+	 		id="MIDI_OUT_BOX"
+	 		text="Select..."
+	 		preferredsize="180,24"
+	 		minimumsize="180,24">
+			<gridbagconstraints
+				gridx="6"
+				gridy="1"
+				weightx="1"
+				insets="0,10,0,0"
+				anchor="GridBagConstraints.LINE_START"
+				/>
+	 	</combobox>
+	 
+	 </panel>
+</doc>

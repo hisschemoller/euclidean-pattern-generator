@@ -20,14 +20,6 @@
 
 package com.hisschemoller.sequencer.view;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
 import org.puremvc.java.multicore.interfaces.INotification;
 import org.puremvc.java.multicore.patterns.mediator.Mediator;
 
@@ -35,6 +27,7 @@ import com.hisschemoller.sequencer.model.vo.PatternVO;
 import com.hisschemoller.sequencer.notification.SeqNotifications;
 import com.hisschemoller.sequencer.notification.note.PatternPositionNote;
 import com.hisschemoller.sequencer.notification.note.PatternSequenceNote;
+import com.hisschemoller.sequencer.util.EPGSwingEngine;
 import com.hisschemoller.sequencer.util.SequencerEnums;
 import com.hisschemoller.sequencer.view.components.Pattern;
 import com.hisschemoller.sequencer.view.components.PatternEditor;
@@ -45,14 +38,14 @@ public class PatternEditorMediator extends Mediator implements IViewEventListene
 {
 	public static final String NAME = PatternEditorMediator.class.getName ( );
 
-	public PatternEditorMediator ( String mediatorName, Object viewComponent )
+	public PatternEditorMediator ( Object viewComponent )
 	{
 		super ( NAME, viewComponent );
 	}
 
 	public String [ ] listNotificationInterests ( )
 	{
-		String [ ] interests = new String[ 12 ];
+		String [ ] interests = new String[ 11 ];
 		interests[ 0 ] = SeqNotifications.REDRAW;
 		interests[ 2 ] = SeqNotifications.PATTERN_SEQUENCE_UPDATED;
 		interests[ 1 ] = SeqNotifications.PATTERN_SETTINGS_UPDATED;
@@ -62,9 +55,8 @@ public class PatternEditorMediator extends Mediator implements IViewEventListene
 		interests[ 6 ] = SeqNotifications.PATTERN_DELETED;
 		interests[ 7 ] = SeqNotifications.PATTERN_MUTED;
 		interests[ 8 ] = SeqNotifications.PATTERN_SOLOED;
-		interests[ 9 ] = SeqNotifications.TEMPO_UPDATED;
+		interests[ 9 ] = SeqNotifications.PATTERN_NAME_UPDATED;
 		interests[ 10 ] = SeqNotifications.PLAYBACK_CHANGED;
-		interests[ 11 ] = SeqNotifications.ADD_PATTERN_SETTINGS;
 		return interests;
 	}
 
@@ -106,40 +98,23 @@ public class PatternEditorMediator extends Mediator implements IViewEventListene
 		{
 			getView ( ).updateAllPatterns ( ( PatternVO ) note.getBody ( ), Pattern.Operation.SOLO );
 		}
-		else if ( note.getName ( ) == SeqNotifications.TEMPO_UPDATED )
+		else if ( note.getName ( ) == SeqNotifications.PATTERN_NAME_UPDATED )
 		{
-			getView ( ).updateTempo ( ( Float ) note.getBody ( ) );
+			getView ( ).updatePattern ( ( PatternVO ) note.getBody ( ), Pattern.Operation.NAME );
 		}
 		else if ( note.getName ( ) == SeqNotifications.PLAYBACK_CHANGED )
 		{
 			getView ( ).updatePlayback ( ( SequencerEnums.Playback ) note.getBody ( ) );
-		}
-		else if ( note.getName ( ) == SeqNotifications.ADD_PATTERN_SETTINGS )
-		{
-			getView ( ).addSettingsToPanel ( ( JPanel ) note.getBody ( ) );
 		}
 	}
 
 	@Override public final void onRegister ( )
 	{
 		super.onRegister ( );
-
-		JFrame jFrame = ( JFrame ) viewComponent;
-
-		GridBagConstraints constraints = new GridBagConstraints ( );
-		PatternEditor editor = new PatternEditor ( );
+		
+		EPGSwingEngine swingEngine = ( EPGSwingEngine ) viewComponent;
+		PatternEditor editor = new PatternEditor ( swingEngine );
 		editor.addViewEventListener ( this );
-		editor.setPreferredSize ( new Dimension ( 800, 400 ) );
-		editor.setMinimumSize ( new Dimension ( 400, 100 ) );
-		editor.setBackground ( new Color ( 0xCCCCFF ) );
-		constraints.fill = GridBagConstraints.BOTH;
-		constraints.weightx = 0;
-		constraints.weighty = 1;
-		constraints.gridx = 0;
-		constraints.gridy = 1;
-		constraints.gridwidth = 2;
-		constraints.insets = new Insets ( 3, 6, 6, 6 );
-		jFrame.add ( editor, constraints );
 		setViewComponent ( editor );
 	}
 

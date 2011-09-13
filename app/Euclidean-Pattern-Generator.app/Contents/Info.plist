@@ -1,35 +1,35 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
-<key>CFBundleExecutable</key>
-<string>JavaApplicationStub</string>
-<key>CFBundleGetInfoString</key>
-<string>Euclidean-Pattern-Generator1.0, Copyright {user} 2004. All rights reserved.</string>
-<key>CFBundleInfoDictionaryVersion</key>
-<string>6.0</string>
-<key>CFBundleIconFile</key>
-<string>Euclidean-Pattern-Generator.icns</string>
-<key>CFBundleIdentifier</key>
-<string>Euclidean-Pattern-Generator</string>
-<key>CFBundleName</key>
-<string>Euclidean-Pattern-Generator</string>
-<key>CFBundlePackageType</key>
-<string>APPL</string>
-<key>CFBundleSignature</key>
-<string>????</string>
-<key>CFBundleVersion</key>
-<string>1.0.1</string>
-<key>Java</key>
-<dict>
-<key>JVMVersion</key>
-<string>1.6+</string>
-<key>MainClass</key>
-<string>com.hisschemoller.sequencer.SequencerMain</string>
-<key>Arguments</key>
-<array/>
-<key>ClassPath</key>
-<string>$JAVAROOT/jar_0.jar</string>
-</dict>
-</dict>
+    <dict>
+        <key>CFBundleExecutable</key>
+        <string>JavaApplicationStub</string>
+        <key>CFBundleGetInfoString</key>
+        <string>Euclidean-Pattern-Generator1.0, Copyright {user} 2004. All rights reserved.</string>
+        <key>CFBundleInfoDictionaryVersion</key>
+        <string>6.0</string>
+        <key>CFBundleIconFile</key>
+        <string>Euclidean-Pattern-Generator.icns</string>
+        <key>CFBundleIdentifier</key>
+        <string>Euclidean-Pattern-Generator</string>
+        <key>CFBundleName</key>
+        <string>Euclidean-Pattern-Generator</string>
+        <key>CFBundlePackageType</key>
+        <string>APPL</string>
+        <key>CFBundleSignature</key>
+        <string>????</string>
+        <key>CFBundleVersion</key>
+        <string>1.0.1</string>
+        <key>Java</key>
+        <dict>
+            <key>JVMVersion</key>
+            <string>1.4*</string>
+            <key>MainClass</key>
+            <string>com.hisschemoller.sequencer.SequencerMain</string>
+            <key>Arguments</key>
+            <array/>
+            <key>ClassPath</key>
+            <string>$JAVAROOT/jar_0.jar:$JAVAROOT/jdom.jar:$JAVAROOT/swixml.jar</string>
+        </dict>
+    </dict>
 </plist>

@@ -31,6 +31,8 @@ import com.hisschemoller.sequencer.model.MidiProxy;
 import com.hisschemoller.sequencer.model.OscProxy;
 import com.hisschemoller.sequencer.model.SequencerProxy;
 import com.hisschemoller.sequencer.notification.SeqNotifications;
+import com.hisschemoller.sequencer.util.EPGPreferences;
+import com.hisschemoller.sequencer.util.EPGSwingEngine;
 import com.hisschemoller.sequencer.view.ControlsMediator;
 import com.hisschemoller.sequencer.view.MenuBarMediator;
 import com.hisschemoller.sequencer.view.PatternEditorMediator;
@@ -40,19 +42,21 @@ public class StartupCommand extends SimpleCommand implements ICommand
 {
 	@Override public final void execute ( INotification notification )
 	{
-		JFrame jFrame = (JFrame) notification.getBody ( );
+		EPGSwingEngine swingEngine = ( EPGSwingEngine ) notification.getBody ( );
+		JFrame jFrame = ( JFrame ) swingEngine.find ( EPGSwingEngine.MAIN_FRAME );
 
 		getFacade ( ).registerProxy ( new SequencerProxy ( ) );
 		getFacade ( ).registerProxy ( new MidiProxy ( ) );
 		getFacade ( ).registerProxy ( new OscProxy ( ) );
 		getFacade ( ).registerProxy ( new FileProxy ( jFrame ) );
-
-		getFacade ( ).registerMediator ( new MenuBarMediator ( null, jFrame ) );
-		getFacade ( ).registerMediator ( new ControlsMediator ( null, jFrame ) );
-		getFacade ( ).registerMediator ( new PatternEditorMediator ( null, jFrame ) );
-		getFacade ( ).registerMediator ( new PatternSettingsMediator ( null, null ) );
-
+		getFacade ( ).registerMediator ( new MenuBarMediator ( jFrame ) );
+		getFacade ( ).registerMediator ( new ControlsMediator ( swingEngine ) );
+		getFacade ( ).registerMediator ( new PatternEditorMediator ( swingEngine ) );
+		getFacade ( ).registerMediator ( new PatternSettingsMediator ( swingEngine ) );
+		
 		sendNotification ( SeqNotifications.UPDATE_MIDI_DEVICES );
+		sendNotification ( SeqNotifications.ENABLE_MIDI_OUT_DEVICE, EPGPreferences.getBoolean ( EPGPreferences.MIDI_OUT_ENABLED, true ) );
+		sendNotification ( SeqNotifications.ENABLE_OSC_DEVICE, EPGPreferences.getBoolean ( EPGPreferences.OSC_ENABLED, true ) );
 		sendNotification ( SeqNotifications.NEW_PROJECT );
 	}
 }

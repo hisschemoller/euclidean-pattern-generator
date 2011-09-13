@@ -1,0 +1,63 @@
+docs/versions.txt
+
+docs/deprecated classes/TweenThread.java
+
+docs/deprecated classes/SendMidiMessageCommand.java
+
+docs/deprecated classes/PatternStep.java
+
+docs/deprecated classes/PatternPointer.java
+
+docs/deprecated classes/CopyOfSendMidiMessageCommand.java
+
+docs/Sequencer Flow.graffle
+
+docs/ScreenFlow Test.screenflow/version.plist
+
+docs/ScreenFlow Test.screenflow/thumbnail.jpg
+
+docs/ScreenFlow Test.screenflow/ScreenFlowDocument.dat
+
+docs/ScreenFlow Test.screenflow/Media/African Drums Burundi Warriors Of the Drum_{0D09E977-1458-4E4A-BE62-225D57DB4A06}.aiff
+
+docs/ScreenFlow Test.screenflow/Media/4C3DD2B1-CAFA-4DEB-9CA8-7167066D50C4_{B1FB041F-9C01-47F5-84B9-757531947972}.scc
+
+docs/Project XML Files/test_16th.xml
+
+docs/Project XML Files/project_test.xml
+
+docs/Project XML Files/patternSaveQuantization.xml
+
+docs/Project XML Files/pattern64steps.xml
+
+docs/Project XML Files/name_test2.xml
+
+docs/Project XML Files/name_test.xml
+
+docs/Project XML Files/Euclidean Sequencer Test Project.xml
+
+docs/Project XML Files/EPS Demo 2 000.xml
+
+docs/Project XML Files/EPS Demo 1 001.xml
+
+docs/Project XML Files/EPS Demo 1 000.xml
+
+docs/Icon/icon_circles.png
+
+docs/Icon/icon.psd
+
+docs/Icon/icon.png
+
+docs/Icon/icon.icns
+
+docs/Icon/icon.fla
+
+docs/Icon/iPhone 4 icon template by Cocoia.psd
+
+.classpath
+
+.project
+
+.settings/org.eclipse.core.resources.prefs
+
+.settings/org.eclipse.jdt.core.prefs

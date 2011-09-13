@@ -35,4 +35,6 @@ public class SettingsVO
 	public String address;
 	public boolean mute;
 	public boolean solo;
+	public String name;
+	public int quantization;
 }

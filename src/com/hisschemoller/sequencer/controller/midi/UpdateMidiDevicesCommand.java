@@ -53,5 +53,6 @@ public class UpdateMidiDevicesCommand extends SimpleCommand
 		midiProxy.setMidiDevicesInfo ( midiDeviceInfo );
 
 		sendNotification ( SeqNotifications.MIDI_DEVICES_UPDATED, midiDeviceInfo );
+		sendNotification ( SeqNotifications.OPEN_MIDI_OUT_DEVICE, null );
 	}
 }

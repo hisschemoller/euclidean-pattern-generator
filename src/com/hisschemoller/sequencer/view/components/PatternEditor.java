@@ -20,12 +20,9 @@
 
 package com.hisschemoller.sequencer.view.components;
 
-import java.awt.LayoutManager;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -38,20 +35,20 @@ import javax.swing.Timer;
 import com.hisschemoller.sequencer.model.vo.PatternVO;
 import com.hisschemoller.sequencer.notification.note.PatternPositionNote;
 import com.hisschemoller.sequencer.notification.note.PatternSequenceNote;
+import com.hisschemoller.sequencer.util.EPGSwingEngine;
 import com.hisschemoller.sequencer.util.SequencerEnums;
 import com.hisschemoller.sequencer.view.events.IViewEventListener;
 import com.hisschemoller.sequencer.view.events.ViewEvent;
 
-public class PatternEditor extends JPanelRoundedCorners implements MouseListener, MouseMotionListener, ComponentListener, ActionListener
+public class PatternEditor implements MouseListener, MouseMotionListener, ActionListener
 {
 	public static final long serialVersionUID = -1L;
-	private Vector<IViewEventListener> _viewEventListeners = new Vector<IViewEventListener> ( );
-	private Vector<Pattern> _patterns = new Vector<Pattern> ( );
+	private Vector < IViewEventListener > _viewEventListeners = new Vector < IViewEventListener > ( );
+	private Vector < Pattern > _patterns = new Vector < Pattern > ( );
 	private Pattern _patternUnderMouse;
 	private PatternVO _patternChangesVO;
-	private JPanel _settingsPanel;
+	private JPanel _panel;
 	private Timer _timer;
-	private float _bpm;
 	private Point _dragOffset = new Point ( 0, 0 );
 
 	public PatternEditor ( )
@@ -59,16 +56,23 @@ public class PatternEditor extends JPanelRoundedCorners implements MouseListener
 		this ( null );
 	}
 
-	public PatternEditor ( LayoutManager layoutManager )
+	public PatternEditor ( EPGSwingEngine swingEngine )
 	{
-		super ( layoutManager );
+		_panel = ( JPanel ) swingEngine.find ( "CANVAS_PANEL" );
+		_panel.setLayout ( null );
+		_panel.addMouseListener ( this );
+		_panel.addMouseMotionListener ( this );
+
+		_timer = new Timer ( 35, this );
+		_timer.start ( );
 	}
 
 	public void addPattern ( PatternVO patternVO, Boolean isAnimated )
 	{
 		Pattern pattern = new Pattern ( patternVO, isAnimated );
-		add ( pattern );
+		_panel.add ( pattern );
 		_patterns.add ( pattern );
+		_panel.repaint ( pattern.getBounds ( ) );
 	}
 
 	public void updatePattern ( PatternVO patternVO, Pattern.Operation operation )
@@ -102,10 +106,10 @@ public class PatternEditor extends JPanelRoundedCorners implements MouseListener
 			Pattern pattern = _patterns.get ( n );
 			if ( pattern.getID ( ) == patternVO.id )
 			{
-				remove ( pattern );
+				_panel.remove ( pattern );
 				pattern.dispose ( );
 				_patterns.remove ( n );
-				repaint ( pattern.getBounds ( ) );
+				_panel.repaint ( pattern.getBounds ( ) );
 				break;
 			}
 		}
@@ -161,35 +165,17 @@ public class PatternEditor extends JPanelRoundedCorners implements MouseListener
 		}
 	}
 
-	public void updateTempo ( float bpm )
-	{
-		_bpm = bpm;
-		int n = _patterns.size ( );
-		while ( --n > -1 )
-		{
-			_patterns.get ( n ).updateTempo ( _bpm );
-		}
-	}
-
 	public void updatePlayback ( SequencerEnums.Playback playback )
 	{
 		if ( playback == SequencerEnums.Playback.STOP )
 		{
-			updateTempo ( 0 );
+			//updateTempo ( 0 );
 		}
-	}
-
-	public void addSettingsToPanel ( JPanel settingsPanel )
-	{
-		_settingsPanel = settingsPanel;
-		add ( _settingsPanel );
-		_settingsPanel.setLocation ( 500, 20 );
-		_settingsPanel.repaint ( _settingsPanel.getBounds ( ) );
 	}
 
 	public Point getMouseClickPosition ( )
 	{
-		return new Point ( getMousePosition ( ).x - Pattern.PANEL_SIZE / 2, getMousePosition ( ).y - Pattern.PANEL_SIZE / 2 );
+		return new Point ( _panel.getMousePosition ( ).x - Pattern.PANEL_SIZE / 2, _panel.getMousePosition ( ).y - Pattern.PANEL_SIZE / 2 );
 	}
 
 	public PatternVO getPatternChangesVO ( )
@@ -212,13 +198,16 @@ public class PatternEditor extends JPanelRoundedCorners implements MouseListener
 		_viewEventListeners.removeElement ( listener );
 	}
 
+	/**
+	 * Called by _timer to update all patterns.
+	 */
 	public void actionPerformed ( ActionEvent event )
 	{
 		int n = _patterns.size ( );
 		while ( --n > -1 )
 		{
 			_patterns.get ( n ).updateDraw ( );
-			repaint ( _patterns.get ( n ).getBounds ( ) );
+			_panel.repaint ( _patterns.get ( n ).getBounds ( ) );
 		}
 	}
 
@@ -269,16 +258,12 @@ public class PatternEditor extends JPanelRoundedCorners implements MouseListener
 
 	public void mouseClicked ( MouseEvent event )
 	{
-		if ( contains ( event.getPoint ( ) ) && event.getClickCount ( ) == 2 )
+		if ( _panel.contains ( event.getPoint ( ) ) && event.getClickCount ( ) == 2 )
 		{
 			if ( _patternUnderMouse == null )
 			{
 				dispatchViewEvent ( ViewEvent.PANEL_CLICK );
 			}
-			// else
-			// {
-			// dispatchViewEvent ( ViewEvent.PATTERN_CENTER_CLICK );
-			// }
 		}
 	}
 
@@ -294,23 +279,6 @@ public class PatternEditor extends JPanelRoundedCorners implements MouseListener
 	{
 	}
 
-	public void componentHidden ( ComponentEvent event )
-	{
-	}
-
-	public void componentMoved ( ComponentEvent event )
-	{
-	}
-
-	public void componentResized ( ComponentEvent event )
-	{
-		_settingsPanel.setLocation ( getWidth ( ) - _settingsPanel.getSize ( ).width - 20, 20 );
-	}
-
-	public void componentShown ( ComponentEvent event )
-	{
-	}
-
 	protected void dispatchViewEvent ( int id )
 	{
 		ViewEvent viewEvent = new ViewEvent ( this, id );
@@ -318,16 +286,5 @@ public class PatternEditor extends JPanelRoundedCorners implements MouseListener
 		{
 			( ( IViewEventListener ) _viewEventListeners.elementAt ( i ) ).viewEventHandler ( viewEvent );
 		}
-	}
-
-	@Override protected void setup ( )
-	{
-		super.setup ( );
-		addMouseListener ( this );
-		addMouseMotionListener ( this );
-		addComponentListener ( this );
-
-		_timer = new Timer ( 35, this );
-		_timer.start ( );
 	}
 }

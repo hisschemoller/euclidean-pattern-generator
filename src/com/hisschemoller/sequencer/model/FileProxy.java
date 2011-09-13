@@ -27,6 +27,8 @@ import javax.swing.JFrame;
 
 import org.puremvc.java.multicore.patterns.proxy.Proxy;
 
+import com.hisschemoller.sequencer.util.EPGPreferences;
+
 public class FileProxy extends Proxy
 {
 	public static final String NAME = FileProxy.class.getName ( );
@@ -43,7 +45,8 @@ public class FileProxy extends Proxy
 
 	@Override public final void onRegister ( )
 	{
-		_fileChooser = new JFileChooser ( );
+		File lastUsedDirectory = new File ( EPGPreferences.get ( EPGPreferences.LAST_USED_DIR, System.getProperty ( "user.home" ) ) );
+		_fileChooser = new JFileChooser ( lastUsedDirectory );
 	}
 
 	@Override public final void onRemove ( )
@@ -61,9 +64,15 @@ public class FileProxy extends Proxy
 		return _frame;
 	}
 
-	public void setFile ( File _file )
+	public void setFile ( File file )
 	{
-		this._file = _file;
+		_file = file;
+
+		/** Store directory path in preferences. */
+		if ( _file != null )
+		{
+			EPGPreferences.put ( EPGPreferences.LAST_USED_DIR, _file.getParent ( ) );
+		}
 	}
 
 	public File getFile ( )
