@@ -13,6 +13,7 @@ public class EPGPreferences
 	public static final String MIDI_IN_DEVICE = "midiInDevice";
 	public static final String MIDI_OUT_DEVICE = "midiOutDevice";
 	public static final String OSC_ENABLED = "oscEnabled";
+	public static final String OSC_PORT = "oscPort";
 	private static final String PREFERENCES = "preferences";
 	private static Preferences _preferences = Preferences.userRoot ( ).node ( PREFERENCES );
 	

@@ -21,18 +21,20 @@
 package com.hisschemoller.sequencer.controller;
 
 import java.awt.Color;
-import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Insets;
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.UIManager;
+import javax.swing.text.html.HTMLDocument;
 
 import org.puremvc.java.multicore.interfaces.INotification;
 import org.puremvc.java.multicore.patterns.command.SimpleCommand;
@@ -48,23 +50,25 @@ public class ShowHelpCommand extends SimpleCommand
 	{
 		FileProxy fileProxy = ( FileProxy ) getFacade ( ).retrieveProxy ( FileProxy.NAME );
 		JFrame frame = fileProxy.getHelpFrame ( );
-		String txt = "";
+		StringBuilder stringBuilder = new StringBuilder ( );
 
 		if ( frame == null )
 		{
 			try
 			{
-				// Get absolute path.
-				File appBase = new File ( "." );
-				String path = appBase.getAbsolutePath ( );
-				System.out.println ( "path: " + path );
-				
-				BufferedReader bufferedReader = new BufferedReader ( new FileReader ( "res/help/help.html" ) );
-				String str;
-				while ( ( str = bufferedReader.readLine ( ) ) != null )
+				InputStream inputStream = ShowHelpCommand.class.getResourceAsStream ( "/res/help/help.html" );
+				final char [ ] buffer = new char[ 0x10000 ];
+				Reader in = new InputStreamReader ( inputStream, "UTF-8" );
+				int read;
+				do
 				{
-					txt += str;
+					read = in.read ( buffer, 0, buffer.length );
+					if ( read > 0 )
+					{
+						stringBuilder.append ( buffer, 0, read );
+					}
 				}
+				while ( read >= 0 );
 			}
 			catch ( FileNotFoundException exception )
 			{
@@ -74,15 +78,19 @@ public class ShowHelpCommand extends SimpleCommand
 			{
 				exception.printStackTrace ( );
 			}
-			
+
 			JTextPane textPane = new JTextPane ( );
-			textPane.setPreferredSize ( new Dimension ( 500, 600 ) );
-			textPane.setSize ( 500, 600 );
+			textPane.setSize ( 600, 600 );
+			textPane.setPreferredSize ( textPane.getSize ( ) );
 			textPane.setEditable ( false );
 			textPane.setMargin ( new Insets ( 10, 10, 10, 10 ) );
 			textPane.setContentType ( "text/html" );
-			textPane.setText ( txt );
+			textPane.setText ( stringBuilder.toString ( ) );
 			textPane.setCaretPosition ( 0 );
+
+			Font font = UIManager.getFont ( "Label.font" );
+			String bodyRule = "body { font-family: " + font.getFamily ( ) + "; font-size: " + font.getSize ( ) + "pt; }";
+			( ( HTMLDocument ) textPane.getDocument ( ) ).getStyleSheet ( ).addRule ( bodyRule );
 
 			JScrollPane scrollPane = new JScrollPane ( );
 			scrollPane.setHorizontalScrollBarPolicy ( ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER );

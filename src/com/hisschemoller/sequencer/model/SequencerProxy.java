@@ -150,7 +150,7 @@ public class SequencerProxy extends Proxy implements ISequenceable
 		}
 
 		/** Send OSC Note On notification. */
-		if ( patternVO.address != null && !patternVO.address.isEmpty () )
+		if ( _isOscEnabled && patternVO.address != null && !patternVO.address.isEmpty () )
 		{
 		    OscMessage oscMessage = new OscMessage ( patternVO.address );
 		    oscMessage.add ( 1 );
@@ -188,7 +188,7 @@ public class SequencerProxy extends Proxy implements ISequenceable
 		}
 
 		/** Send OSC Note Off notification. */
-		if ( patternVO.address != null && !patternVO.address.isEmpty () )
+		if ( _isOscEnabled && patternVO.address != null && !patternVO.address.isEmpty () )
 		{
 		    OscMessage oscMessage = new OscMessage ( patternVO.address );
 		    oscMessage.add ( 0 );

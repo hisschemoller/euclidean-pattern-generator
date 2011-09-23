@@ -57,6 +57,7 @@ public class StartupCommand extends SimpleCommand implements ICommand
 		sendNotification ( SeqNotifications.UPDATE_MIDI_DEVICES );
 		sendNotification ( SeqNotifications.ENABLE_MIDI_OUT_DEVICE, EPGPreferences.getBoolean ( EPGPreferences.MIDI_OUT_ENABLED, true ) );
 		sendNotification ( SeqNotifications.ENABLE_OSC_DEVICE, EPGPreferences.getBoolean ( EPGPreferences.OSC_ENABLED, true ) );
+		sendNotification ( SeqNotifications.UPDATE_OSC_PORT, EPGPreferences.getInt ( EPGPreferences.OSC_PORT, 9000 ) );
 		sendNotification ( SeqNotifications.NEW_PROJECT );
 	}
 }

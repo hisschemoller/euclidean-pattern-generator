@@ -2,38 +2,17 @@
 <doc>
 	<panel
 	 	id="panel">
-	 		
- 		<panel
- 			background="C7E1EA"
- 			opaque="true"
- 			layout="GridBagLayout">
-			 		
+	 	
+	 	<JToggleButtonForPanel
+	 		id="SETTINGS_BUTTON_EXPAND_OTHER"
+		 	actioncommand="SETTINGS_BUTTON_EXPAND_OTHER"
+		 	text="Other Settings"
+	 		background="C7E1EA">
 	 		<gridbagconstraints
-				gridx="0"
-				gridy="0"
 	 			weightx="1"
-				insets="0,0,4,0"
-				fill="GridBagConstraints.HORIZONTAL"
-	 			/>
- 			
-		 	<label
-		 		text="Other Settings">
-		 		<gridbagconstraints
-	 				weightx="1"
-	 				insets="8,10,8,0"
-					fill="GridBagConstraints.BOTH"
-		 			/>
-		 	</label>
-		 	
-	 		<button
-		 		id="SETTINGS_BUTTON_EXPAND_OTHER"
-		 		actioncommand="SETTINGS_BUTTON_EXPAND_OTHER"
-		 		text="Close">
-		 		<gridbagconstraints
-		 			anchor="GridBagConstraints.LINE_END"
-		 			/>
-		 	</button>
-	 	</panel>
+				insets="0,0,2,0"
+	 			fill="GridBagConstraints.HORIZONTAL" />
+	 	</JToggleButtonForPanel>
 	 	
 	 	<panel
 	 		id="SETTINGS_CONTENT_PANEL_OTHER"

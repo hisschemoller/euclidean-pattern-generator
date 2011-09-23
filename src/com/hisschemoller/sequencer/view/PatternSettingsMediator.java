@@ -42,24 +42,16 @@ public class PatternSettingsMediator extends Mediator implements IViewEventListe
 
 	public String [ ] listNotificationInterests ( )
 	{
-		String [ ] interests = new String[ 8 ];
+		String [ ] interests = new String[ 9 ];
 		interests[ 0 ] = SeqNotifications.PATTERN_SETTINGS_UPDATED;
 		interests[ 1 ] = SeqNotifications.MIDI_SETTINGS_UPDATED;
-<<<<<<< HEAD
-		interests[ 3 ] = SeqNotifications.OSC_SETTINGS_UPDATED;
-		interests[ 4 ] = SeqNotifications.PATTERN_SETTINGS_OPENED;
-		interests[ 5 ] = SeqNotifications.SELECT_PATTERN;
-		interests[ 6 ] = SeqNotifications.PATTERN_SOLOED;
-		interests[ 7 ] = SeqNotifications.PATTERN_MUTED;
-		interests[ 8 ] = SeqNotifications.RESOLUTION_UPDATED;
-=======
 		interests[ 2 ] = SeqNotifications.SELECT_PATTERN;
 		interests[ 3 ] = SeqNotifications.PATTERN_QUANTIZATION_UPDATED;
 		interests[ 4 ] = SeqNotifications.PATTERN_SOLOED;
 		interests[ 5 ] = SeqNotifications.PATTERN_MUTED;
 		interests[ 6 ] = SeqNotifications.PATTERN_NAME_UPDATED;
 		interests[ 7 ] = SeqNotifications.RESOLUTION_UPDATED;
->>>>>>> Recommit the changes from the earlier commit today.
+		interests[ 8 ] = SeqNotifications.OSC_SETTINGS_UPDATED;
 		return interests;
 	}
 
@@ -73,21 +65,13 @@ public class PatternSettingsMediator extends Mediator implements IViewEventListe
 		{
 			getView ( ).updateSettings ( ( PatternVO ) note.getBody ( ) );
 		}
-<<<<<<< HEAD
-		else if ( note.getName ( ) == SeqNotifications.OSC_SETTINGS_UPDATED )
-		{
-			getView ( ).updateSettings ( (PatternVO) note.getBody ( ) );
-		}
-		else if ( note.getName ( ) == SeqNotifications.PATTERN_SETTINGS_OPENED )
-=======
 		else if ( note.getName ( ) == SeqNotifications.SELECT_PATTERN )
->>>>>>> Recommit the changes from the earlier commit today.
 		{
 			getView ( ).updatePattern ( ( PatternVO ) note.getBody ( ) );
 		}
 		else if ( note.getName ( ) == SeqNotifications.PATTERN_QUANTIZATION_UPDATED )
 		{
-			getView ( ).updatePattern ( ( PatternVO ) note.getBody ( ) );
+			getView ( ).updateSettings ( ( PatternVO ) note.getBody ( ) );
 		}
 		else if ( note.getName ( ) == SeqNotifications.PATTERN_SOLOED )
 		{
@@ -99,11 +83,15 @@ public class PatternSettingsMediator extends Mediator implements IViewEventListe
 		}
 		else if ( note.getName ( ) == SeqNotifications.PATTERN_NAME_UPDATED )
 		{
-			getView ( ).updatePattern ( ( PatternVO ) note.getBody ( ) );
+			getView ( ).updateSettings ( ( PatternVO ) note.getBody ( ) );
 		}
 		else if ( note.getName ( ) == SeqNotifications.RESOLUTION_UPDATED )
 		{
 			getView ( ).updateResolution ( ( Integer ) note.getBody ( ) );
+		}
+		else if ( note.getName ( ) == SeqNotifications.OSC_SETTINGS_UPDATED )
+		{
+			getView ( ).updateSettings ( ( PatternVO ) note.getBody ( ) );
 		}
 	}
 
@@ -127,7 +115,7 @@ public class PatternSettingsMediator extends Mediator implements IViewEventListe
 			sendNotification ( SeqNotifications.UPDATE_MIDI_SETTINGS, getView ( ).getSettings ( ) );
 			break;
 
-		case ViewEvent.OSC_SETTINGS_CHANGE:
+		case ViewEvent.OSC_ADDRESS_CHANGE:
 			sendNotification ( SeqNotifications.UPDATE_OSC_SETTINGS, getView ( ).getSettings ( ) );
 			break;
 

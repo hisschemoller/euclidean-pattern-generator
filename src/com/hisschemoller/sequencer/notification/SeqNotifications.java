@@ -37,11 +37,9 @@ import com.hisschemoller.sequencer.controller.midi.OpenMidiDeviceCommand;
 import com.hisschemoller.sequencer.controller.midi.SendMidiAllNotesOffCommand;
 import com.hisschemoller.sequencer.controller.midi.SendMidiMessageCommand;
 import com.hisschemoller.sequencer.controller.midi.UpdateMidiDevicesCommand;
-<<<<<<< HEAD
-import com.hisschemoller.sequencer.controller.osc.SendOscMessageCommand;
-=======
 import com.hisschemoller.sequencer.controller.osc.EnableOscCommand;
->>>>>>> Recommit the changes from the earlier commit today.
+import com.hisschemoller.sequencer.controller.osc.SendOscMessageCommand;
+import com.hisschemoller.sequencer.controller.osc.UpdateOscPortCommand;
 import com.hisschemoller.sequencer.controller.pattern.CreatePatternCommand;
 import com.hisschemoller.sequencer.controller.pattern.DeletePatternCommand;
 import com.hisschemoller.sequencer.controller.pattern.UpdateMidiSettingsCommand;
@@ -106,9 +104,8 @@ public class SeqNotifications
 
 	public static final String SEND_MIDI_MESSAGE = "SeqNotifications.SEND_MIDI_MESSAGE";
 
-<<<<<<< HEAD
 	public static final String SEND_OSC_MESSAGE = "SeqNotifications.SEND_OSC_MESSAGE";
-=======
+	
 	public static final String SEND_MIDI_ALL_NOTES_OFF = "SeqNotifications.SEND_MIDI_ALL_NOTES_OFF";
 	
 	public static final String ENABLE_MIDI_OUT_DEVICE = "SeqNotifications.ENABLE_MIDI_OUT_DEVICE";
@@ -116,7 +113,9 @@ public class SeqNotifications
 	
 	public static final String ENABLE_OSC_DEVICE = "SeqNotifications.ENABLE_OSC_DEVICE";
 	public static final String OSC_DEVICE_ENABLED = "SeqNotifications.OSC_DEVICE_ENABLED";
->>>>>>> Recommit the changes from the earlier commit today.
+	
+	public static final String UPDATE_OSC_PORT = "SeqNotifications.UPDATE_OSC_PORT";
+	public static final String OSC_PORT_UPDATED = "SeqNotifications.OSC_PORT_UPDATED";
 
 	public static final String OPEN_PROJECT = "SeqNotifications.OPEN_PROJECT";
 	public static final String PROJECT_OPENED = "SeqNotifications.PROJECT_OPENED";
@@ -148,16 +147,14 @@ public class SeqNotifications
 		facade.registerCommand ( OPEN_MIDI_IN_DEVICE, new OpenMidiDeviceCommand ( ) );
 		facade.registerCommand ( OPEN_MIDI_OUT_DEVICE, new OpenMidiDeviceCommand ( ) );
 		facade.registerCommand ( SEND_MIDI_MESSAGE, new SendMidiMessageCommand ( ) );
-<<<<<<< HEAD
 		facade.registerCommand ( SEND_OSC_MESSAGE, new SendOscMessageCommand ( ) );
 		facade.registerCommand ( UPDATE_MIDI_SETTINGS, new UpdateMidiSettingsCommand ( ) );
 		facade.registerCommand ( UPDATE_OSC_SETTINGS, new UpdateOscSettingsCommand ( ) );
-=======
 		facade.registerCommand ( SEND_MIDI_ALL_NOTES_OFF, new SendMidiAllNotesOffCommand ( ) );
 		facade.registerCommand ( UPDATE_MIDI_SETTINGS, new UpdateMidiSettingsCommand ( ) );
 		facade.registerCommand ( ENABLE_MIDI_OUT_DEVICE, new EnableMidiOutCommand ( ) );
 		facade.registerCommand ( ENABLE_OSC_DEVICE, new EnableOscCommand ( ) );
->>>>>>> Recommit the changes from the earlier commit today.
+		facade.registerCommand ( UPDATE_OSC_PORT, new UpdateOscPortCommand ( ) );
 		facade.registerCommand ( UPDATE_PATTERN_SETTINGS, new UpdatePatternSettingsCommand ( ) );
 		facade.registerCommand ( UPDATE_PATTERN_NAME, new UpdatePatternNameCommand ( ) );
 		facade.registerCommand ( UPDATE_PATTERN_LOCATION, new UpdatePatternLocationCommand ( ) );

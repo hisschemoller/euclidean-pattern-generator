@@ -160,6 +160,11 @@ public class Controls implements ActionListener, ChangeListener
 		_oscTextField.setEnabled ( isEnabled );
 	}
 
+	public void updateOscPort ( int port )
+	{
+		_oscTextField.setText ( String.valueOf ( port ) );
+	}
+
 	public float getTempoValue ( )
 	{
 		return _tempoValue;
@@ -216,6 +221,10 @@ public class Controls implements ActionListener, ChangeListener
 		else if ( event.getSource ( ) == _oscCheckBox )
 		{
 			dispatchViewEvent ( _oscCheckBox, ViewEvent.OSC_CHECKBOX_SELECT );
+		}
+		else if ( event.getSource ( ) == _oscTextField )
+		{
+			dispatchViewEvent ( _oscTextField, ViewEvent.OSC_PORT_CHANGE );
 		}
 	}
 

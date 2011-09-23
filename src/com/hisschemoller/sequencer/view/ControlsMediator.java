@@ -22,6 +22,7 @@ package com.hisschemoller.sequencer.view;
 
 import javax.sound.midi.MidiDevice;
 import javax.swing.JCheckBox;
+import javax.swing.JTextField;
 
 import org.puremvc.java.multicore.interfaces.INotification;
 import org.puremvc.java.multicore.patterns.mediator.Mediator;
@@ -44,7 +45,7 @@ public class ControlsMediator extends Mediator implements IViewEventListener
 
 	public String [ ] listNotificationInterests ( )
 	{
-		String [ ] interests = new String[ 7 ];
+		String [ ] interests = new String[ 8 ];
 		interests[ 0 ] = SeqNotifications.TEMPO_UPDATED;
 		interests[ 1 ] = SeqNotifications.PLAYBACK_CHANGED;
 		interests[ 2 ] = SeqNotifications.RESOLUTION_UPDATED;
@@ -52,6 +53,7 @@ public class ControlsMediator extends Mediator implements IViewEventListener
 		interests[ 4 ] = SeqNotifications.MIDI_OUT_DEVICE_OPENED;
 		interests[ 5 ] = SeqNotifications.MIDI_OUT_DEVICE_ENABLED;
 		interests[ 6 ] = SeqNotifications.OSC_DEVICE_ENABLED;
+		interests[ 7 ] = SeqNotifications.OSC_PORT_UPDATED;
 		return interests;
 	}
 
@@ -85,6 +87,10 @@ public class ControlsMediator extends Mediator implements IViewEventListener
 		else if ( name == SeqNotifications.OSC_DEVICE_ENABLED )
 		{
 			getView ( ).updateOscEnabled ( ( Boolean ) note.getBody ( ) );
+		}
+		else if ( name == SeqNotifications.OSC_PORT_UPDATED )
+		{
+			getView ( ).updateOscPort ( ( Integer ) note.getBody ( ) );
 		}
 	}
 
@@ -129,6 +135,10 @@ public class ControlsMediator extends Mediator implements IViewEventListener
 
 		case ViewEvent.OSC_CHECKBOX_SELECT:
 			sendNotification ( SeqNotifications.ENABLE_OSC_DEVICE, ( ( JCheckBox ) event.getSource ( ) ).isSelected ( ) );
+			break;
+
+		case ViewEvent.OSC_PORT_CHANGE:
+			sendNotification ( SeqNotifications.UPDATE_OSC_PORT, Integer.parseInt ( ( ( JTextField ) event.getSource ( ) ).getText ( ) ) );
 			break;
 
 		default:

@@ -25,6 +25,7 @@ import java.awt.Container;
 import javax.swing.SwingUtilities;
 
 import com.hisschemoller.sequencer.util.EPGSwingEngine;
+import com.hisschemoller.sequencer.view.components.JToggleButtonForPanel;
 import com.hisschemoller.sequencer.view.components.MainFrame;
 
 /**
@@ -41,6 +42,7 @@ public class SequencerMain
 		{
 			/** Layout with SwiXML. */
 			EPGSwingEngine swingEngine = new EPGSwingEngine ( this );
+			swingEngine.getTaglib ( ).registerTag ( "JToggleButtonForPanel", JToggleButtonForPanel.class );
 			Container container = swingEngine.render ( "res/layout/main.xml" );
 			container.setVisible ( true );
 			

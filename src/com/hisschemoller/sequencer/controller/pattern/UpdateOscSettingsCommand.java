@@ -21,14 +21,11 @@
 package com.hisschemoller.sequencer.controller.pattern;
 
 import org.puremvc.java.multicore.interfaces.INotification;
-
 import org.puremvc.java.multicore.patterns.command.SimpleCommand;
 
 import com.hisschemoller.sequencer.model.SequencerProxy;
-
 import com.hisschemoller.sequencer.model.vo.PatternVO;
 import com.hisschemoller.sequencer.model.vo.SettingsVO;
-
 import com.hisschemoller.sequencer.notification.SeqNotifications;
 
 public final class UpdateOscSettingsCommand extends SimpleCommand
@@ -43,8 +40,10 @@ public final class UpdateOscSettingsCommand extends SimpleCommand
 		SequencerProxy sequencerProxy = ( SequencerProxy ) getFacade ( ).retrieveProxy ( SequencerProxy.NAME );
 		PatternVO patternVO = sequencerProxy.getPatternByID ( settingsVO.patternID );
 
-		patternVO.address = settingsVO.address;
-
-		sendNotification ( SeqNotifications.OSC_SETTINGS_UPDATED, patternVO );
+		if ( !patternVO.address.equals ( settingsVO.address ) )
+		{
+			patternVO.address = settingsVO.address;
+			sendNotification ( SeqNotifications.OSC_SETTINGS_UPDATED, patternVO );
+		}
 	}
 }

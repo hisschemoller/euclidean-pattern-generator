@@ -29,7 +29,7 @@
             <key>Arguments</key>
             <array/>
             <key>ClassPath</key>
-            <string>$JAVAROOT/jar_0.jar:$JAVAROOT/jdom.jar:$JAVAROOT/swixml.jar</string>
+            <string>$JAVAROOT/jar_0.jar:$JAVAROOT/jdom.jar:$JAVAROOT/swixml.jar:$JAVAROOT/oscP5.jar:$JAVAROOT/processing-core-0186.jar</string>
         </dict>
     </dict>
 </plist>

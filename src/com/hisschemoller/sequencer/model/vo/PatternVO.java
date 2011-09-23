@@ -48,7 +48,7 @@ public class PatternVO
 	public int noteLength;
 
 	/** OSC settings */
-	public String address;
+	public String address = "";
 
 	/** Other settings */
 	public boolean mute = false;

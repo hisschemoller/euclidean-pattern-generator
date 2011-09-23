@@ -23,7 +23,6 @@ package com.hisschemoller.sequencer.view.components;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -43,20 +42,20 @@ public class SettingsPanels implements ActionListener
 	private JPanel _contentPanelEuclid;
 	private JPanel _contentPanelMidiOsc;
 	private JPanel _contentPanelOther;
-	private JButton _buttonEuclid;
-	private JButton _buttonMidiOsc;
-	private JButton _buttonOther;
+	private JToggleButtonForPanel _buttonEuclid;
+	private JToggleButtonForPanel _buttonMidiOsc;
+	private JToggleButtonForPanel _buttonOther;
 	private boolean _euclidExpanded = true;
 	private boolean _midiOscExpanded = true;
 	private boolean _otherExpanded = true;
 	
 	public SettingsPanels ( EPGSwingEngine swingEngine )
 	{
-		_buttonEuclid = ( JButton ) swingEngine.find ( SETTINGS_BUTTON_EXPAND_EUCLID );
+		_buttonEuclid = ( JToggleButtonForPanel ) swingEngine.find ( SETTINGS_BUTTON_EXPAND_EUCLID );
 		_buttonEuclid.addActionListener ( this );
-		_buttonMidiOsc = ( JButton ) swingEngine.find ( SETTINGS_BUTTON_EXPAND_MIDI_OSC );
+		_buttonMidiOsc = ( JToggleButtonForPanel ) swingEngine.find ( SETTINGS_BUTTON_EXPAND_MIDI_OSC );
 		_buttonMidiOsc.addActionListener ( this );
-		_buttonOther = ( JButton ) swingEngine.find ( SETTINGS_BUTTON_EXPAND_OTHER );
+		_buttonOther = ( JToggleButtonForPanel ) swingEngine.find ( SETTINGS_BUTTON_EXPAND_OTHER );
 		_buttonOther.addActionListener ( this );
 		
 		_contentPanelEuclid = ( JPanel ) swingEngine.find ( SETTINGS_CONTENT_PANEL_EUCLID );
@@ -77,24 +76,21 @@ public class SettingsPanels implements ActionListener
 	public void actionPerformed ( ActionEvent event )
 	{
 		String command = event.getActionCommand ( );
-
+		
 		if ( SETTINGS_BUTTON_EXPAND_EUCLID.equals ( command ) )
 		{
 			_euclidExpanded = !_euclidExpanded;
 			_contentPanelEuclid.setVisible ( _euclidExpanded );
-			_buttonEuclid.setText ( _euclidExpanded ? "Close" : "Open" );
 		}
 		else if ( SETTINGS_BUTTON_EXPAND_MIDI_OSC.equals ( command ) )
 		{
 			_midiOscExpanded = !_midiOscExpanded;
 			_contentPanelMidiOsc.setVisible ( _midiOscExpanded );
-			_buttonMidiOsc.setText ( _midiOscExpanded ? "Close" : "Open" );
 		}
 		else if ( SETTINGS_BUTTON_EXPAND_OTHER.equals ( command ) )
 		{
 			_otherExpanded = !_otherExpanded;
 			_contentPanelOther.setVisible ( _otherExpanded );
-			_buttonOther.setText ( _otherExpanded ? "Close" : "Open" );
 		}
 	}
 }

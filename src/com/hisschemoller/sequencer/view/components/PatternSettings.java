@@ -34,10 +34,7 @@ import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
-<<<<<<< HEAD
-import javax.swing.SwingConstants;
-=======
->>>>>>> Recommit the changes from the earlier commit today.
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
@@ -96,6 +93,24 @@ public class PatternSettings implements ActionListener, ChangeListener
 		_channelSlider.addChangeListener ( this );
 		_channelLabel = ( JLabel ) swingEngine.find ( "SETTINGS_MIDI_CHANNEL_TEXT" );
 
+		_addressTextField = ( JTextField ) swingEngine.find ( "SETTINGS_OSC_ADDRESS" );
+		_addressTextField.getDocument ( ).addDocumentListener ( new DocumentListener ( )
+		{
+			public void removeUpdate ( DocumentEvent event )
+			{
+				PatternSettings.this.dispatchViewEventLater ( _addressTextField, ViewEvent.OSC_ADDRESS_CHANGE );
+			}
+
+			public void insertUpdate ( DocumentEvent event )
+			{
+				PatternSettings.this.dispatchViewEventLater ( _addressTextField, ViewEvent.OSC_ADDRESS_CHANGE );
+			}
+
+			public void changedUpdate ( DocumentEvent event )
+			{
+			}
+		} );
+
 		_pitchSlider = ( JSlider ) swingEngine.find ( "SETTINGS_MIDI_PITCH_SLIDER" );
 		_pitchSlider.addChangeListener ( this );
 		_pitchLabel = ( JLabel ) swingEngine.find ( "SETTINGS_MIDI_PITCH_TEXT" );
@@ -113,12 +128,12 @@ public class PatternSettings implements ActionListener, ChangeListener
 		{
 			public void removeUpdate ( DocumentEvent event )
 			{
-				PatternSettings.this.dispatchViewEvent ( _nameTextField, ViewEvent.NAME_CHANGE );
+				PatternSettings.this.dispatchViewEventLater ( _nameTextField, ViewEvent.NAME_CHANGE );
 			}
 
 			public void insertUpdate ( DocumentEvent event )
 			{
-				PatternSettings.this.dispatchViewEvent ( _nameTextField, ViewEvent.NAME_CHANGE );
+				PatternSettings.this.dispatchViewEventLater ( _nameTextField, ViewEvent.NAME_CHANGE );
 			}
 
 			public void changedUpdate ( DocumentEvent event )
@@ -270,17 +285,14 @@ public class PatternSettings implements ActionListener, ChangeListener
 		{
 			dispatchViewEvent ( _deleteButton, ViewEvent.SOLO_PATTERN );
 		}
-<<<<<<< HEAD
-        else if ( event.getSource ( ) == _addressTextField )
-        {
-            dispatchViewEvent ( _addressTextField, ViewEvent.OSC_SETTINGS_CHANGE );
-        }
-=======
+		else if ( event.getSource ( ) == _addressTextField )
+		{
+			dispatchViewEvent ( _addressTextField, ViewEvent.OSC_ADDRESS_CHANGE );
+		}
 		else if ( event.getSource ( ).getClass ( ) == JRadioButton.class )
 		{
 			dispatchViewEvent ( _stepTimeButtonGroup, ViewEvent.QUANTIZATION );
 		}
->>>>>>> Recommit the changes from the earlier commit today.
 	}
 
 	public void stateChanged ( ChangeEvent event )
@@ -349,6 +361,23 @@ public class PatternSettings implements ActionListener, ChangeListener
 	}
 
 	/**
+	 * Dispatch custom ViewEvent .
+	 */
+	protected void dispatchViewEventLater ( Object inSource, int inId )
+	{
+		final Object source = inSource;
+		final int id = inId;
+
+		SwingUtilities.invokeLater ( new Runnable ( )
+		{
+			public void run ( )
+			{
+				dispatchViewEvent ( source, id );
+			}
+		} );
+	}
+
+	/**
 	 * Dispatch custom ViewEvent.
 	 */
 	protected void dispatchViewEvent ( Object source, int id )
@@ -357,7 +386,7 @@ public class PatternSettings implements ActionListener, ChangeListener
 		{
 			return;
 		}
-		
+
 		ViewEvent viewEvent = new ViewEvent ( source, id );
 		for ( int i = 0; i < _viewEventListeners.size ( ); i++ )
 		{
@@ -365,140 +394,6 @@ public class PatternSettings implements ActionListener, ChangeListener
 		}
 	}
 
-<<<<<<< HEAD
-	protected void setup ( )
-	{
-		setOpaque ( false );
-
-		GridBagConstraints constraints = new GridBagConstraints ( );
-
-		JLabel label = new JLabel ( "Pattern Settings" );
-		constraints.gridx = 0;
-		constraints.gridy = 0;
-		constraints.gridwidth = 3;
-		constraints.insets = new Insets ( 15, 0, 5, 0 );
-		constraints.anchor = GridBagConstraints.LINE_START;
-		add ( label, constraints );
-
-		createLabel ( 1, 0, "Steps", false );
-		_stepsSlider = createSlider ( 1, 1, 16, 1 );
-		_stepsLabel = createLabel ( 1, 2, "", true );
-
-		createLabel ( 2, 0, "Fills", false );
-		_fillsSlider = createSlider ( 2, 1, 16, 1 );
-		_fillsLabel = createLabel ( 2, 2, "", true );
-
-		createLabel ( 3, 0, "Rotate", false );
-		_rotationSlider = createSlider ( 3, 0, 15, 0 );
-		_rotationLabel = createLabel ( 3, 2, "", true );
-
-		label = new JLabel ( "MIDI Settings" );
-		constraints.gridx = 0;
-		constraints.gridy = 5;
-		constraints.gridwidth = 3;
-		add ( label, constraints );
-
-		createLabel ( 6, 0, "Channel", false );
-		_channelSlider = createSlider ( 6, 1, 16, 1 );
-		_channelLabel = createLabel ( 6, 2, "", true );
-
-		createLabel ( 7, 0, "Pitch", false );
-		_pitchSlider = createSlider ( 7, 0, 127, 0 );
-		_pitchLabel = createLabel ( 7, 2, "", true );
-
-		createLabel ( 8, 0, "Velocity", false );
-		_velocitySlider = createSlider ( 8, 0, 127, 0 );
-		_velocityLabel = createLabel ( 8, 2, "", true );
-
-		createLabel ( 9, 0, "Length", false );
-		_lengthSlider = createSlider ( 9, 1, 1, 1 );
-		_lengthLabel = createLabel ( 9, 2, "", true );
-
-		label = new JLabel ( "OSC Settings" );
-		constraints.gridx = 0;
-		constraints.gridy = 11;
-		constraints.gridwidth = 3;
-		add ( label, constraints );
-
-		createLabel ( 12, 0, "Address", false );
-		_addressTextField = new JTextField ( 24 );
-        _addressTextField.setMinimumSize ( new Dimension ( 128, 20 ) );
-        _addressTextField.setPreferredSize ( new Dimension ( 128, 20 ) );
-		_addressTextField.addActionListener ( this );
-		constraints.gridx = 1;
-		constraints.gridy = 12;
-		constraints.gridwidth = 2;
-		Insets oldInsets = constraints.insets;
-        constraints.insets = new Insets ( 0, 12, 0, 0 );
-		add ( _addressTextField, constraints );
-		constraints.insets = oldInsets;
-
-		label = new JLabel ( "Other Settings" );
-		constraints.gridx = 0;
-		constraints.gridy = 14;
-		constraints.gridwidth = 3;
-		add ( label, constraints );
-
-		createLabel ( 15, 0, "Mute", false );
-		_muteCheckBox = new JCheckBox ( );
-		_muteCheckBox.addActionListener ( this );
-		constraints.gridx = 1;
-		constraints.gridy = 15;
-		constraints.gridwidth = 1;
-		constraints.insets = new Insets ( 0, 12, 0, 0 );
-		add ( _muteCheckBox, constraints );
-
-		createLabel ( 16, 0, "Solo", false );
-		_soloCheckBox = new JCheckBox ( );
-		_soloCheckBox.addActionListener ( this );
-		constraints.gridx = 1;
-		constraints.gridy = 16;
-		add ( _soloCheckBox, constraints );
-
-		createLabel ( 17, 0, "Delete", false );
-		_deleteButton = new JButton ( "Delete pattern" );
-		_deleteButton.addActionListener ( this );
-		constraints.gridx = 1;
-		constraints.gridy = 17;
-		constraints.gridwidth = 1;
-		add ( _deleteButton, constraints );
-	}
-
-	private JSlider createSlider ( int gridRow, int min, int max, int value )
-	{
-		GridBagConstraints constraints = new GridBagConstraints ( );
-		constraints.gridx = 1;
-		constraints.gridy = gridRow;
-		JSlider slider = new JSlider ( SwingConstants.HORIZONTAL, min, max, value );
-		slider.addChangeListener ( this );
-        slider.setMinimumSize ( new Dimension ( 128, 20 ) );
-		slider.setPreferredSize ( new Dimension ( 128, 20 ) );
-        Insets oldInsets = constraints.insets;
-        constraints.insets = new Insets ( 0, 12, 0, 0 );
-		add ( slider, constraints );
-        constraints.insets = oldInsets;
-		return slider;
-	}
-
-	private JLabel createLabel ( int gridRow, int gridCol, String text, Boolean isValueLabel )
-	{
-		GridBagConstraints constraints = new GridBagConstraints ( );
-		constraints.anchor = GridBagConstraints.LINE_START;
-		constraints.gridx = gridCol;
-		constraints.gridy = gridRow;
-		JLabel label = new JLabel ( text, SwingConstants.RIGHT );
-
-		if ( isValueLabel )
-		{
-			label.setPreferredSize ( new Dimension ( 40, 20 ) );
-		}
-
-		add ( label, constraints );
-		return label;
-	}
-
-=======
->>>>>>> Recommit the changes from the earlier commit today.
 	private void setSettingsEnabled ( boolean enabled )
 	{
 		if ( enabled != _isEnabled )
@@ -510,11 +405,12 @@ public class PatternSettings implements ActionListener, ChangeListener
 			_channelSlider.setEnabled ( _isEnabled );
 			_velocitySlider.setEnabled ( _isEnabled );
 			_pitchSlider.setEnabled ( _isEnabled );
+			_addressTextField.setEnabled ( _isEnabled );
 			_lengthSlider.setEnabled ( _isEnabled );
 			_muteCheckBox.setEnabled ( _isEnabled );
 			_soloCheckBox.setEnabled ( _isEnabled );
-			_deleteButton.setEnabled ( _isEnabled );
 			_nameTextField.setEnabled ( _isEnabled );
+			_deleteButton.setEnabled ( _isEnabled );
 
 			Enumeration < AbstractButton > radioButtons = _stepTimeButtonGroup.getElements ( );
 			while ( radioButtons.hasMoreElements ( ) )

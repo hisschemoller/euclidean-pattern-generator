@@ -29,9 +29,6 @@ import com.hisschemoller.sequencer.util.EPGPreferences;
 
 public class EnableOscCommand extends SimpleCommand
 {
-	/**
-	 * Enable MIDI out.
-	 */
 	@Override public final void execute ( final INotification notification )
 	{
 		boolean isEnabled = ( Boolean ) notification.getBody ( );

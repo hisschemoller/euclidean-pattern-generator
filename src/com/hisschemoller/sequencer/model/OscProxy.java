@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 Wouter Hisschem嗟ler
+ * Copyright 2011 Wouter Hisschemoller
  * 
  * This file is part of Euclidean Pattern Generator.
  * 
@@ -27,47 +27,57 @@ import org.puremvc.java.multicore.patterns.proxy.Proxy;
 import oscP5.OscMessage;
 import oscP5.OscP5;
 
-public final class OscProxy extends Proxy {
+public final class OscProxy extends Proxy
+{
+	public static String NAME = OscProxy.class.getName ( );
+	private OscP5 _oscP5;
+	private NetAddress _localhost;
 
-    public static String NAME = OscProxy.class.getName ( );
-    private OscP5 _oscP5;
-    private NetAddress _localhost;
+	public OscProxy ( )
+	{
+		super ( NAME );
+	}
 
-    public OscProxy ()
-    {
-        super ( NAME );
-    }
+	@Override public void onRegister ( )
+	{
+		_oscP5 = new OscP5 ( new Object ( ), 9001 );
+		// setNetAddress ( 9000 ); Done in StartupCommand.
+	}
 
-    @Override public void onRegister ()
-    {
-        _oscP5 = new OscP5 ( new Object ( ), 9001 );
+	@Override public void onRemove ( )
+	{
+		_oscP5.stop ( );
+		_oscP5.dispose ( );
+	}
 
-        // todo:  allow configuration of OSC host and port
-        _localhost = new NetAddress ( "localhost", 9000 );
-    }
+	public void setNetAddress ( int port )
+	{
+		/** Port can't be 9001. */
+		port = ( port == 9001 ) ? 9000 : port;
+		_localhost = new NetAddress ( "localhost", port );
+	}
 
-    @Override public void onRemove ()
-    {
-        _oscP5.stop();
-        _oscP5.dispose();
-    }
+	public int getPort ( )
+	{
+		return ( _localhost != null ) ? _localhost.port ( ) : 0;
+	}
 
-    public void send ( final OscMessage oscMessage )
-    {
-        StringBuilder sb = new StringBuilder();
-        sb.append("sending osc message ");
-        sb.append(oscMessage.addrPattern());
-        sb.append(" ");
-        sb.append(oscMessage.get(0).intValue());
-        sb.append(" ");
-        sb.append(oscMessage.get(1).intValue());
-        sb.append(" ");
-        sb.append(oscMessage.get(2).intValue());
-        sb.append(" ");
-        sb.append(oscMessage.get(3).intValue());
-        sb.append(" to ");
-        sb.append(_localhost.toString());
-        System.out.println(sb.toString());
-        _oscP5.send( oscMessage, _localhost );
-    }
+	public void send ( final OscMessage oscMessage )
+	{
+		StringBuilder sb = new StringBuilder ( );
+		sb.append ( "sending osc message " );
+		sb.append ( oscMessage.addrPattern ( ) );
+		sb.append ( " " );
+		sb.append ( oscMessage.get ( 0 ).intValue ( ) );
+		sb.append ( " " );
+		sb.append ( oscMessage.get ( 1 ).intValue ( ) );
+		sb.append ( " " );
+		sb.append ( oscMessage.get ( 2 ).intValue ( ) );
+		sb.append ( " " );
+		sb.append ( oscMessage.get ( 3 ).intValue ( ) );
+		sb.append ( " to " );
+		sb.append ( _localhost.toString ( ) );
+		System.out.println ( sb.toString ( ) );
+		_oscP5.send ( oscMessage, _localhost );
+	}
 }
