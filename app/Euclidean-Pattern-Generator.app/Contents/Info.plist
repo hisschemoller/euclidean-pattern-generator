@@ -25,7 +25,7 @@
             <key>JVMVersion</key>
             <string>1.4*</string>
             <key>MainClass</key>
-            <string>com.hisschemoller.sequencer.SequencerMain</string>
+            <string>com.hisschemoller.epg.EPGMain</string>
             <key>Arguments</key>
             <array/>
             <key>ClassPath</key>
