@@ -34,7 +34,26 @@
 				/>
 		</panel>
 		
-		<panel
+		<scrollpane
+			id="CANVAS_SCROLLPANE"
+			border="0">
+			<gridbagconstraints
+				gridx="0"
+				gridy="1"
+				weightx="1"
+				weighty="1"
+				insets="2,4,4,2"
+				fill="GridBagConstraints.BOTH"
+				/>
+				
+			<panel
+				id="CANVAS_PANEL"
+				background="F0F8FF">
+			</panel>
+		</scrollpane>
+		
+		<!-- The old non-scrolling panel. -->
+		<!-- panel
 			id="CANVAS_PANEL"
 			background="F0F8FF">
 			<gridbagconstraints
@@ -45,7 +64,7 @@
 				insets="2,4,4,2"
 				fill="GridBagConstraints.BOTH"
 				/>
-		</panel>
+		</panel -->
 	
 		<scrollpane
 			name="settings_panel"

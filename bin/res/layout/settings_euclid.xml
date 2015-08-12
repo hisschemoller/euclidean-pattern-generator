@@ -18,7 +18,6 @@
 	 		id="SETTINGS_CONTENT_PANEL_EUCLID"
 			opaque="false"
  			layout="GridBagLayout">
- 			
 	 		<gridbagconstraints
 				gridx="0"
 				gridy="1"
