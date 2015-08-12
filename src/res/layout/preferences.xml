@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialog
+	id="PREFERENCES_DIALOG"
+	size="450,500"
+	preferredsize="450,500"
+	title="Preferences" 
+	defaultCloseOperation="JFrame.DO_NOTHING_ON_CLOSE"
+	resizable="false"
+	background="DDDDDD"
+	layout="BorderLayout" >
+	
+	<panel
+		name="preferences_panel"
+		constraints="BorderLayout.CENTER"
+		layout="GridBagLayout"
+		background="776666">
+		
+		<panel
+			PreferredSize="450,500"
+			MaximumSize="450,500"
+			background="C7E1EA"
+			layout="GridBagLayout">
+			<gridbagconstraints
+				gridx="0"
+				gridy="0"
+				weightx="1"
+				weighty="1"
+				gridwidth="2"
+				insets="4,4,4,4"
+				fill="GridBagConstraints.BOTH"
+				/>
+		
+			<panel
+				opaque="false"
+				layout="GridBagLayout">
+				<gridbagconstraints
+					gridx="0"
+					gridy="0"
+					weightx="1"
+					weighty="1"
+					insets="10,10,10,10"
+					fill="GridBagConstraints.BOTH"
+					/>
+					
+				<checkbox
+			 		id="OSC_OUT_CHECKBOX"
+			 		text="OSC Out"
+			 		selected="true">
+					<gridbagconstraints
+						gridx="0"
+						gridy="0"
+						insets="0,0,0,0"
+						anchor="GridBagConstraints.LINE_START"
+						/>
+			 	</checkbox>
+			 	
+			 	<label
+			 		text="OSC Port">
+					<gridbagconstraints
+						gridx="1"
+						gridy="0"
+						insets="0,10,0,0"
+						anchor="GridBagConstraints.LINE_END"
+						/>
+			 	</label>
+			 		
+			 	<textfield
+			 		id="OSC_OUT_TEXTFIELD"
+			 		text="9000"
+			 		preferredsize="100,24"
+			 		minimumsize="100,24"
+			 		tooltiptext="Enter an OSC port number on which to send."
+			 		horizontalalignment="JTextField.RIGHT">
+					<gridbagconstraints
+						gridx="2"
+						gridy="0"
+						weightx="1"
+						insets="0,10,0,0"
+						fill="GridBagConstraints.HORIZONTAL"
+						/>
+			 	</textfield>
+			 	
+			 	<checkbox
+			 		id="MIDI_IN_CHECKBOX"
+			 		text="MIDI In"
+			 		selected="true">
+					<gridbagconstraints
+						gridx="0"
+						gridy="1"
+						insets="5,0,0,0"
+						anchor="GridBagConstraints.LINE_START"
+						/>
+			 	</checkbox>
+			 	
+			 	<label
+			 		text="MIDI In Port">
+					<gridbagconstraints
+						gridx="1"
+						gridy="1"
+						insets="5,10,0,0"
+						anchor="GridBagConstraints.LINE_END"
+						/>
+			 	</label>
+			 	
+			 	<combobox
+			 		id="MIDI_IN_COMBOBOX"
+			 		text="Select..."
+			 		preferredsize="100,24"
+			 		minimumsize="100,24">
+					<gridbagconstraints
+						gridx="2"
+						gridy="1"
+						weightx="1"
+						insets="5,10,0,0"
+						fill="GridBagConstraints.HORIZONTAL"
+						/>
+			 	</combobox>
+			 	
+			 	<checkbox
+			 		id="MIDI_IN_CLOCK_CHECKBOX"
+			 		text="Sync to MIDI In Clock"
+			 		selected="false">
+					<gridbagconstraints
+						gridx="2"
+						gridy="2"
+						insets="5,10,0,0"
+						anchor="GridBagConstraints.LINE_START"
+						/>
+			 	</checkbox>
+			 	
+			 	<checkbox
+			 		id="MIDI_IN_NOTE_TRIGGER_CHECKBOX"
+			 		text="Trigger by MIDI note"
+			 		selected="false">
+					<gridbagconstraints
+						gridx="2"
+						gridy="3"
+						insets="0,10,0,0"
+						anchor="GridBagConstraints.LINE_START"
+						/>
+			 	</checkbox>
+			 	
+			 	<checkbox
+			 		id="MIDI_OUT_CHECKBOX"
+			 		text="MIDI Out"
+			 		selected="true">
+					<gridbagconstraints
+						gridx="0"
+						gridy="4"
+						insets="5,0,0,0"
+						anchor="GridBagConstraints.LINE_START"
+						/>
+			 	</checkbox>
+			 	
+			 	<label
+			 		text="MIDI Out Port">
+					<gridbagconstraints
+						gridx="1"
+						gridy="4"
+						insets="5,10,0,0"
+						anchor="GridBagConstraints.LINE_END"
+						/>
+			 	</label>
+			 	
+			 	<combobox
+			 		id="MIDI_OUT_COMBOBOX"
+			 		text="Select..."
+			 		preferredsize="100,24"
+			 		minimumsize="100,24">
+					<gridbagconstraints
+						gridx="2"
+						gridy="4"
+						weightx="1"
+						insets="5,10,0,0"
+						fill="GridBagConstraints.HORIZONTAL"
+						/>
+			 	</combobox>
+			 	
+			 	<separator
+			 		foreground="888888"
+			 		background="ffffff">
+					<gridbagconstraints
+						gridx="0"
+						gridy="5"
+						gridwidth="3"
+						insets="15,0,0,0"
+						fill="GridBagConstraints.HORIZONTAL"
+						/>
+			 	</separator>
+			 	
+			 	<checkbox
+			 		id="MIDI_NOTE_NAMES_CHECKBOX"
+			 		text="Display note names for MIDI pitch values."
+			 		selected="false">
+					<gridbagconstraints
+						gridx="0"
+						gridy="6"
+						gridwidth="3"
+						insets="5,0,0,0"
+						anchor="GridBagConstraints.LINE_START"
+						fill="GridBagConstraints.HORIZONTAL"
+						/>
+			 	</checkbox>
+			 	
+			 	<checkbox
+			 		id="RELOAD_LAST_PROJECT_CHECKBOX"
+			 		text="Reload last opened project on startup."
+			 		selected="false">
+					<gridbagconstraints
+						gridx="0"
+						gridy="7"
+						gridwidth="3"
+						insets="5,0,0,0"
+						anchor="GridBagConstraints.LINE_START"
+						fill="GridBagConstraints.HORIZONTAL"
+						/>
+			 	</checkbox>
+		 	
+			 	<panel
+			 		id="EMPTY_FILLER_PANEL"
+					opaque="false">
+			 		<gridbagconstraints
+						weightx="0"
+						weighty="1"
+						gridx="0"
+						gridy="8"
+			 			/>
+			 	</panel>
+					
+			</panel>
+		</panel>
+	</panel>
+</dialog>

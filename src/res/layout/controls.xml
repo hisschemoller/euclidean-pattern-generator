@@ -69,90 +69,18 @@
 				anchor="GridBagConstraints.LINE_END"
 				/>
 	 	</formattedtextfield>
-	 	
-	 	<!-- separator
-	 		preferredsize="20,20"
-	 		background="000000"
-	 		foreground="FFFFFF"
-	 		orientation="SwingConstants.VERTICAL">
+	 		
+	 	<button
+	 		id="PREFERENCES_BUTTON"
+	 		text="Preferences...">
 			<gridbagconstraints
 				gridx="3"
 				gridy="0"
-				gridheight="2"
-				fill="GridBagConstraints.VERTICAL"
-				/>
-	 	</separator -->
-	 	
-	 	<checkbox
-	 		id="OSC_CHECKBOX"
-	 		text="Send OSC"
-	 		selected="true">
-			<gridbagconstraints
-				gridx="4"
-				gridy="0"
-				anchor="GridBagConstraints.LINE_START"
-				/>
-	 	</checkbox>
-	 	
-	 	<checkbox
-	 		id="MIDI_CHECKBOX"
-	 		text="Send MIDI"
-	 		selected="true">
-			<gridbagconstraints
-				gridx="4"
-				gridy="1"
-				anchor="GridBagConstraints.LINE_START"
-				/>
-	 	</checkbox>
-	 	
-	 	<label
-	 		text="OSC Port">
-			<gridbagconstraints
-				gridx="5"
-				gridy="0"
-				insets="0,20,0,0"
-				anchor="GridBagConstraints.LINE_END"
-				/>
-	 	</label>
-	 	
-	 	<label
-	 		text="MIDI Out Port">
-			<gridbagconstraints
-				gridx="5"
-				gridy="1"
-				insets="0,20,0,0"
-				anchor="GridBagConstraints.LINE_END"
-				/>
-	 	</label>
-	 		
-	 	<textfield
-	 		id="OSC_TEXTFIELD"
-	 		text="9000"
-	 		preferredsize="180,24"
-	 		minimumsize="180,24"
-	 		tooltiptext="Enter an OSC port number on which to send."
-	 		horizontalalignment="JTextField.RIGHT">
-			<gridbagconstraints
-				gridx="6"
-				gridy="0"
-				insets="0,10,0,0"
-				anchor="GridBagConstraints.LINE_START"
-				/>
-	 	</textfield>
-	 	
-	 	<combobox
-	 		id="MIDI_OUT_BOX"
-	 		text="Select..."
-	 		preferredsize="180,24"
-	 		minimumsize="180,24">
-			<gridbagconstraints
-				gridx="6"
-				gridy="1"
 				weightx="1"
-				insets="0,10,0,0"
+				insets="6,10,0,0"
 				anchor="GridBagConstraints.LINE_START"
 				/>
-	 	</combobox>
+	 	</button>
 	 
 	 </panel>
 </doc>

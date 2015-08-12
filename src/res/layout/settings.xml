@@ -26,15 +26,30 @@
 		 	</panel>
 		 	
 		 	<panel
-			 	id="SETTINGS_PANEL_MIDI_OSC"
+			 	id="SETTINGS_PANEL_MIDI_OSC_OUT"
 				layout="GridBagLayout"
 				opaque="false"
-				include="res/layout/settings_midi_osc.xml#panel">
+				include="res/layout/settings_midi_osc_out.xml#panel">
 		 		<gridbagconstraints
 					weightx="1"
 					weighty="0"
 					gridx="0"
 					gridy="1"
+					fill="GridBagConstraints.HORIZONTAL"
+					anchor="GridBagConstraints.FIRST_LINE_START"
+		 			/>
+		 	</panel>
+		 	
+		 	<panel
+			 	id="SETTINGS_PANEL_MIDI_OSC_IN"
+				layout="GridBagLayout"
+				opaque="false"
+				include="res/layout/settings_midi_osc_in.xml#panel">
+		 		<gridbagconstraints
+					weightx="1"
+					weighty="0"
+					gridx="0"
+					gridy="2"
 					fill="GridBagConstraints.HORIZONTAL"
 					anchor="GridBagConstraints.FIRST_LINE_START"
 		 			/>
@@ -49,7 +64,7 @@
 					weightx="1"
 					weighty="0"
 					gridx="0"
-					gridy="2"
+					gridy="3"
 					fill="GridBagConstraints.HORIZONTAL"
 					anchor="GridBagConstraints.FIRST_LINE_START"
 		 			/>
@@ -62,7 +77,7 @@
 					weightx="0"
 					weighty="1"
 					gridx="0"
-					gridy="3"
+					gridy="4"
 		 			/>
 		 	</panel>
 	 	</panel>

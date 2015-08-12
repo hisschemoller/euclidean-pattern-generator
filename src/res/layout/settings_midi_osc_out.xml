@@ -4,9 +4,9 @@
 	 	id="panel">
 	 	
 	 	<JToggleButtonForPanel
-	 		id="SETTINGS_BUTTON_EXPAND_EUCLID"
-		 	actioncommand="SETTINGS_BUTTON_EXPAND_EUCLID"
-		 	text="Euclidean Rhythm Settings"
+	 		id="SETTINGS_BUTTON_EXPAND_MIDI_OSC_OUT"
+		 	actioncommand="SETTINGS_BUTTON_EXPAND_MIDI_OSC_OUT"
+		 	text="MIDI / OSC Out Settings"
 	 		background="C7E1EA">
 	 		<gridbagconstraints
 	 			weightx="1"
@@ -15,7 +15,7 @@
 	 	</JToggleButtonForPanel>
 	 	
 	 	<panel
-	 		id="SETTINGS_CONTENT_PANEL_EUCLID"
+	 		id="SETTINGS_CONTENT_PANEL_MIDI_OSC_OUT"
 			opaque="false"
  			layout="GridBagLayout">
 	 		<gridbagconstraints
@@ -27,7 +27,7 @@
 	 			/>
 	 			
 	 		<label
-	 			text="Length">
+	 			text="Channel">
 		 		<gridbagconstraints
 					gridx="0"
 					gridy="0"
@@ -37,9 +37,9 @@
 	 		</label>
 	 			
 		 	<slider
-		 		id="SETTINGS_EUCLID_LENGTH_SLIDER"
+		 		id="SETTINGS_MIDI_OUT_CHANNEL_SLIDER"
 		 		minimum="1"
-		 		maximum="64"
+		 		maximum="16"
 		 		orientation="SwingConstants.HORIZONTAL"
 		 		preferredsize="100,29">
 		 		<gridbagconstraints
@@ -51,7 +51,7 @@
 			</slider>
 	 			
 	 		<label
-		 		id="SETTINGS_EUCLID_LENGTH_TEXT"
+		 		id="SETTINGS_MIDI_OUT_CHANNEL_TEXT"
 	 			text="0"
 	 			preferredsize="40,24">
 		 		<gridbagconstraints
@@ -62,7 +62,7 @@
 	 		</label>
 	 			
 	 		<label
-	 			text="Notes">
+	 			text="Pitch">
 		 		<gridbagconstraints
 					gridx="0"
 					gridy="1"
@@ -72,44 +72,44 @@
 	 		</label>
 	 			
 		 	<slider
-		 		id="SETTINGS_EUCLID_NOTES_SLIDER"
-		 		minimum="1"
-		 		maximum="64"
-		 		orientation="SwingConstants.HORIZONTAL"
-		 		preferredsize="100,29">
-		 		<gridbagconstraints
-					gridx="1"
-					gridy="1"
-	 				weightx="1"
-					fill="GridBagConstraints.HORIZONTAL"
-		 			/>
-			</slider>
-	 			
-	 		<label
-		 		id="SETTINGS_EUCLID_NOTES_TEXT"
-	 			text="0"
-	 			preferredsize="40,24">
-		 		<gridbagconstraints
-					gridx="2"
-					gridy="1"
-					anchor="GridBagConstraints.LINE_END"
-		 			/>
-	 		</label>
-	 			
-	 		<label
-	 			text="Rotation">
-		 		<gridbagconstraints
-					gridx="0"
-					gridy="2"
-	 				insets="0,10,0,0"
-					anchor="GridBagConstraints.LINE_START"
-		 			/>
-	 		</label>
-	 			
-		 	<slider
-		 		id="SETTINGS_EUCLID_ROTATE_SLIDER"
+		 		id="SETTINGS_MIDI_OUT_PITCH_SLIDER"
 		 		minimum="0"
-		 		maximum="64"
+		 		maximum="127"
+		 		orientation="SwingConstants.HORIZONTAL"
+		 		preferredsize="100,29">
+		 		<gridbagconstraints
+					gridx="1"
+					gridy="1"
+	 				weightx="1"
+					fill="GridBagConstraints.HORIZONTAL"
+		 			/>
+			</slider>
+	 			
+	 		<label
+		 		id="SETTINGS_MIDI_OUT_PITCH_TEXT"
+	 			text="0"
+	 			preferredsize="40,24">
+		 		<gridbagconstraints
+					gridx="2"
+					gridy="1"
+					anchor="GridBagConstraints.LINE_END"
+		 			/>
+	 		</label>
+	 			
+	 		<label
+	 			text="Velocity">
+		 		<gridbagconstraints
+					gridx="0"
+					gridy="2"
+	 				insets="0,10,0,0"
+					anchor="GridBagConstraints.LINE_START"
+		 			/>
+	 		</label>
+	 			
+		 	<slider
+		 		id="SETTINGS_MIDI_OUT_VELOCITY_SLIDER"
+		 		minimum="0"
+		 		maximum="127"
 		 		orientation="SwingConstants.HORIZONTAL"
 		 		preferredsize="100,29">
 		 		<gridbagconstraints
@@ -121,7 +121,7 @@
 			</slider>
 	 			
 	 		<label
-		 		id="SETTINGS_EUCLID_ROTATE_TEXT"
+		 		id="SETTINGS_MIDI_OUT_VELOCITY_TEXT"
 	 			text="0"
 	 			preferredsize="40,24">
 		 		<gridbagconstraints
@@ -130,7 +130,38 @@
 					anchor="GridBagConstraints.LINE_END"
 		 			/>
 	 		</label>
-		
+	 		
+	 		<panel
+				opaque="false"
+	 			layout="GridBagLayout">
+		 		<gridbagconstraints
+					gridx="0"
+					gridy="3"
+		 			gridwidth="3"
+					fill="GridBagConstraints.HORIZONTAL"
+		 			/>
+	 			
+		 		<label
+		 			text="OSC Address">
+			 		<gridbagconstraints
+						gridx="0"
+						gridy="0"
+		 				insets="0,10,0,0"
+						anchor="GridBagConstraints.LINE_START"
+			 			/>
+		 		</label>
+		 			
+			 	<textfield
+			 		id="SETTINGS_OSC_OUT_ADDRESS">
+			 		<gridbagconstraints
+						gridx="1"
+						gridy="0"
+						weightx="1"
+		 				insets="0,10,0,50"
+						fill="GridBagConstraints.HORIZONTAL"
+			 			/>
+				</textfield>
+			</panel>
 		</panel>
  	</panel>
 </doc>
