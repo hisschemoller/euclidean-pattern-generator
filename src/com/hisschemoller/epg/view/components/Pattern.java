@@ -65,7 +65,12 @@ public class Pattern extends JPanel implements Runnable
 	{
 
 	}
-
+	
+	/**
+	 * An aspect of a pattern has changed.
+	 * @param patternVO Pattern data of the changed pattern.
+	 * @param operation Type of update, change in location, pointer, location or name.
+	 */
 	public void updatePattern ( PatternVO patternVO, Pattern.Operation operation )
 	{
 		switch ( operation )
@@ -153,6 +158,14 @@ public class Pattern extends JPanel implements Runnable
 	 */
 	public void updateSequence ( PatternSequenceNote note )
 	{
+		// Fast user generated UI updates may conflict with clock generated updates,
+		// resulting in the rotation being larger than the number of steps in a pattern.
+		// This is kept within limits here.
+		if ( _rotation > _numSteps )
+		{
+			_rotation %= _numSteps;
+		}
+		
 		int stepIndexRotationCorrected = note.stepIndex - _rotation;
 
 		if ( stepIndexRotationCorrected < 0 )
