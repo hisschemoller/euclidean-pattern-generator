@@ -98,6 +98,8 @@ public class Pattern extends JPanel implements Runnable
 			}
 
 			_painter.setPattern ( selections );
+			// change in pattern length may change ring diameter and thus pointer length
+			_painter.updatePointer ( patternVO.patternState );
 
 			/** Rotation change. */
 			if ( _rotation != patternVO.rotation || _numSteps != patternVO.steps )
