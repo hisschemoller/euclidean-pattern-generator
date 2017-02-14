@@ -21,7 +21,7 @@ The algorithm was originally written by Eric Björklund of Los Alamos National L
 ## New in v1.2
 Individual patterns can be muted and unmuted by external MIDI Note In and Note Out messages, so that a song arrangement can be created in an external MIDI sequencer or DAW and played back with the Euclidean Pattern Generator.
 
-[https://github.com/WouterHisschemoller/Euclidean-Pattern-Generator/tree/v1.2]
+https://github.com/WouterHisschemoller/Euclidean-Pattern-Generator/tree/v1.2
 
 ## New in v1.1
 The main new feature in this version is OSC (Open Sound Protocol) support. The OSC functionality was written by Michael L. Heuer, who kindly offered to collaborate.
