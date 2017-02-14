@@ -155,8 +155,8 @@ public class PatternPainter
 	}
 
 	/**
-	 * 
-	 * @param selections
+	 * Set the pattern of steps to be drawn.
+	 * @param selections Array of steps where true is a selected step.
 	 */
 	public void setPattern ( Boolean [ ] selections )
 	{
@@ -183,7 +183,7 @@ public class PatternPainter
 				_polygon.addPoint ( stepX, stepY );
 			}
 		}
-
+		
 		drawImage ( );
 	}
 
@@ -209,6 +209,9 @@ public class PatternPainter
 
 	/**
 	 * Show the MIDI note that is played.
+	 * This is shown by the step dot being animated on note on and off.
+	 * @param midiStatus MIDI note on or off.
+	 * @param stepIndex Current step in the pattern sequence. 
 	 */
 	public void setPlayedNote ( int midiStatus, int stepIndex )
 	{

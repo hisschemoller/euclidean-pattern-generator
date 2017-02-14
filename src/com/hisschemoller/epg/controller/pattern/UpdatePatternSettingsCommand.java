@@ -38,7 +38,8 @@ import com.hisschemoller.epg.util.BjorklundGenerator3;
 public class UpdatePatternSettingsCommand extends SimpleCommand
 {
 	/**
-	 * 
+	 * Executed when one of the pattern settings is changed by the user through the UI.
+	 * @param notification SettingsVO object.
 	 */
 	@Override public final void execute ( final INotification notification )
 	{

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doc>
+	<panel
+	 	id="panel">
+	 	
+	 	<JToggleButtonForPanel
+	 		id="SETTINGS_BUTTON_EXPAND_MIDI_OSC_IN"
+		 	actioncommand="SETTINGS_BUTTON_EXPAND_MIDI_OSC_IN"
+		 	text="MIDI / OSC In Settings"
+	 		background="C7E1EA">
+	 		<gridbagconstraints
+	 			weightx="1"
+				insets="0,0,2,0"
+	 			fill="GridBagConstraints.HORIZONTAL" />
+	 	</JToggleButtonForPanel>
+	 	
+	 	<panel
+	 		id="SETTINGS_CONTENT_PANEL_MIDI_OSC_IN"
+			opaque="false"
+ 			layout="GridBagLayout">
+	 		<gridbagconstraints
+				gridx="0"
+				gridy="1"
+	 			weightx="1"
+				insets="0,0,4,0"
+				fill="GridBagConstraints.HORIZONTAL"
+	 			/>
+	 			
+	 		<label
+	 			text="Trigger">
+		 		<gridbagconstraints
+					gridx="0"
+					gridy="0"
+	 				insets="0,10,0,0"
+					anchor="GridBagConstraints.LINE_START"
+		 			/>
+	 		</label>
+	 			
+	 		<checkbox
+		 		id="SETTINGS_MIDI_IN_TRIGGER_ENABLE_CHECKBOX"
+		 		text="Trigger by Note On / Off">
+			 	<gridbagconstraints
+					gridx="1"
+					gridy="0"
+					gridwidth="2"
+	 				insets="0,10,0,0"
+					anchor="GridBagConstraints.LINE_START"
+			 		/>
+		 	</checkbox>
+	 			
+	 		<label
+	 			text="Channel">
+		 		<gridbagconstraints
+					gridx="0"
+					gridy="1"
+	 				insets="0,10,0,0"
+					anchor="GridBagConstraints.LINE_START"
+		 			/>
+	 		</label>
+	 			
+		 	<slider
+		 		id="SETTINGS_MIDI_IN_CHANNEL_SLIDER"
+		 		minimum="1"
+		 		maximum="16"
+		 		orientation="SwingConstants.HORIZONTAL"
+		 		preferredsize="100,29">
+		 		<gridbagconstraints
+					gridx="1"
+					gridy="1"
+	 				weightx="1"
+					fill="GridBagConstraints.HORIZONTAL"
+		 			/>
+			</slider>
+	 			
+	 		<label
+		 		id="SETTINGS_MIDI_IN_CHANNEL_TEXT"
+	 			text="0"
+	 			preferredsize="40,24">
+		 		<gridbagconstraints
+					gridx="2"
+					gridy="1"
+					anchor="GridBagConstraints.LINE_END"
+		 			/>
+	 		</label>
+	 			
+	 		<label
+	 			text="Pitch">
+		 		<gridbagconstraints
+					gridx="0"
+					gridy="2"
+	 				insets="0,10,0,0"
+					anchor="GridBagConstraints.LINE_START"
+		 			/>
+	 		</label>
+	 			
+		 	<slider
+		 		id="SETTINGS_MIDI_IN_PITCH_SLIDER"
+		 		minimum="0"
+		 		maximum="127"
+		 		orientation="SwingConstants.HORIZONTAL"
+		 		preferredsize="100,29">
+		 		<gridbagconstraints
+					gridx="1"
+					gridy="2"
+	 				weightx="1"
+					fill="GridBagConstraints.HORIZONTAL"
+		 			/>
+			</slider>
+	 			
+	 		<label
+		 		id="SETTINGS_MIDI_IN_PITCH_TEXT"
+	 			text="0"
+	 			preferredsize="40,24">
+		 		<gridbagconstraints
+					gridx="2"
+					gridy="2"
+					anchor="GridBagConstraints.LINE_END"
+		 			/>
+	 		</label>
+	 			
+		</panel>
+ 	</panel>
+</doc>
