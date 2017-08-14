@@ -81,6 +81,16 @@
 				anchor="GridBagConstraints.LINE_START"
 				/>
 	 	</button>
+	 	
+	 	<label
+	 		text="Version 1.2.1">
+			<gridbagconstraints
+				gridx="4"
+				gridy="0"
+				insets="0,10,0,10"
+				anchor="GridBagConstraints.LINE_START"
+				/>
+	 	</label>
 	 
 	 </panel>
 </doc>
