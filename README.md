@@ -88,7 +88,7 @@ OSC Port: An application or machine that receives OSC messages has a receiving s
 Use the slider or text input to change the playback speed. This is measured in Beats Per Minute (BPM).
 
 ## All Notes Off
-When editing patterns while they play, you will occasionally experience 'hanging notes'. This happens when a Note On message is sent to start a note, but no corresponding Note Off message is sent later to stop the note. Especially when you use a sustained sound, you will hear it continue indefinetely. Even when you stop playback.
+When editing patterns while they play, you will occasionally experience 'hanging notes'. This happens when a Note On message is sent to start a note, but no corresponding Note Off message is sent later to stop the note. Especially when you use a sustained sound, you will hear it continue indefinitely. Even when you stop playback.
 
 This button sends an 'All Notes Off' MIDI message (CC #123) to all MIDI channels. Most applications and machines that receive MIDI will respond correctly and stop all playing notes.
 
